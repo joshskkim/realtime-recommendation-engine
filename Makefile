@@ -50,7 +50,7 @@ dev-down: ## Stop development services
 # Data Management
 load-sample-data: ## Generate and load sample data
 	@echo "📊 Generating sample data..."
-	python scripts/generate-sample-data.py
+	python3 scripts/generate-sample-data.py
 	@echo "📥 Loading data into services..."
 	./scripts/load-test-data.sh
 	@echo "✅ Sample data loaded successfully!"
@@ -68,7 +68,7 @@ test-ml: ## Run ML service tests only
 
 test-integration: ## Run integration tests
 	@echo "🧪 Running integration tests..."
-	python scripts/integration-tests.py
+	python3 scripts/integration-tests.py
 	@echo "✅ Integration tests completed!"
 
 # Monitoring and Debugging
