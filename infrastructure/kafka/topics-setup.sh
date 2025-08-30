@@ -31,17 +31,28 @@ create_topic() {
     local topic_name=$1
     local partitions=$2
     local replication_factor=$3
-    local config=$4
+    local cleanup_policy=$4
+    local retention_ms=$5
     
     echo "📝 Creating topic: $topic_name"
     
-    docker exec $KAFKA_CONTAINER kafka-topics --create \
-        --bootstrap-server $BOOTSTRAP_SERVERS \
-        --topic $topic_name \
-        --partitions $partitions \
-        --replication-factor $replication_factor \
-        --config $config \
-        --if-not-exists
+    if [ -n "$cleanup_policy" ] && [ -n "$retention_ms" ]; then
+        docker exec $KAFKA_CONTAINER kafka-topics --create \
+            --bootstrap-server $BOOTSTRAP_SERVERS \
+            --topic $topic_name \
+            --partitions $partitions \
+            --replication-factor $replication_factor \
+            --config cleanup.policy=$cleanup_policy \
+            --config retention.ms=$retention_ms \
+            --if-not-exists
+    else
+        docker exec $KAFKA_CONTAINER kafka-topics --create \
+            --bootstrap-server $BOOTSTRAP_SERVERS \
+            --topic $topic_name \
+            --partitions $partitions \
+            --replication-factor $replication_factor \
+            --if-not-exists
+    fi
         
     if [ $? -eq 0 ]; then
         echo "✅ Topic '$topic_name' created successfully"
@@ -54,28 +65,28 @@ create_topic() {
 echo "🚀 Creating Kafka topics..."
 
 # User interaction events (high throughput)
-create_topic "user-interactions" 6 1 "cleanup.policy=delete,retention.ms=604800000" # 7 days
+create_topic "user-interactions" 6 1 "delete" "604800000" # 7 days
 
 # User profile updates (moderate throughput)
-create_topic "user-profiles" 3 1 "cleanup.policy=compact,retention.ms=2592000000" # 30 days
+create_topic "user-profiles" 3 1 "compact" "2592000000" # 30 days
 
 # Content metadata updates (low throughput)
-create_topic "content-metadata" 3 1 "cleanup.policy=compact,retention.ms=7776000000" # 90 days
+create_topic "content-metadata" 3 1 "compact" "7776000000" # 90 days
 
 # Generated recommendations (moderate throughput)
-create_topic "recommendations-generated" 6 1 "cleanup.policy=delete,retention.ms=259200000" # 3 days
+create_topic "recommendations-generated" 6 1 "delete" "259200000" # 3 days
 
 # Model update notifications (low throughput)
-create_topic "model-updates" 1 1 "cleanup.policy=delete,retention.ms=86400000" # 1 day
+create_topic "model-updates" 1 1 "delete" "86400000" # 1 day
 
 # A/B testing events
-create_topic "ab-test-events" 3 1 "cleanup.policy=delete,retention.ms=604800000" # 7 days
+create_topic "ab-test-events" 3 1 "delete" "604800000" # 7 days
 
 # System events and monitoring
-create_topic "system-events" 3 1 "cleanup.policy=delete,retention.ms=259200000" # 3 days
+create_topic "system-events" 3 1 "delete" "259200000" # 3 days
 
 # Dead letter queue for failed messages
-create_topic "dlq-failed-events" 3 1 "cleanup.policy=delete,retention.ms=604800000" # 7 days
+create_topic "dlq-failed-events" 3 1 "delete" "604800000" # 7 days
 
 echo ""
 echo "📋 Topic Summary:"
