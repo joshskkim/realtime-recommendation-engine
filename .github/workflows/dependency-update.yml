@@ -1,0 +1,45 @@
+name: Dependency Updates
+
+on:
+  schedule:
+    - cron: '0 0 * * 1'  # Weekly on Monday
+  workflow_dispatch:
+
+jobs:
+  update-dependencies:
+    name: Update Dependencies
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Update Python dependencies
+        run: |
+          cd services/ml-service
+          pip install pip-upgrader
+          pip-upgrade requirements.txt
+      
+      - name: Update Node.js dependencies
+        run: |
+          cd services/api-gateway
+          npx npm-check-updates -u
+          npm install
+      
+      - name: Update .NET dependencies
+        run: |
+          cd services/user-service
+          dotnet list package --outdated
+      
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v5
+        with:
+          commit-message: 'chore: update dependencies'
+          title: 'Weekly Dependency Updates'
+          body: |
+            ## Dependency Updates
+            
+            This PR contains automatic dependency updates for all services.
+            
+            Please review and test before merging.
+          branch: deps/weekly-update
+          delete-branch: true

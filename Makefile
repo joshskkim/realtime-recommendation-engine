@@ -34,12 +34,16 @@ infra-down: ## Stop infrastructure services
 # Development Environment
 dev-up: infra-up ## Start all services in development mode
 	@echo "🔧 Starting development services..."
-	docker-compose up -d ml-service kafka-ui redis-commander
+	docker-compose up -d ml-service api-gateway user-service kafka-ui redis-commander
 	@echo "🌐 Services available at:"
+	@echo "  - API Gateway: http://localhost:3000"
 	@echo "  - ML Service API: http://localhost:8000"
+	@echo "  - User Service API: http://localhost:5000"
 	@echo "  - Kafka UI: http://localhost:8080"
 	@echo "  - Redis Commander: http://localhost:8081"
-	@echo "  - API Documentation: http://localhost:8000/docs"
+	@echo "  - API Documentation:"
+	@echo "    - ML Service: http://localhost:8000/docs"
+	@echo "    - User Service: http://localhost:5000/swagger"
 	@echo "✅ Development environment is ready!"
 
 dev-down: ## Stop development services
@@ -128,6 +132,16 @@ build-ml: ## Build only ML service
 	docker-compose build ml-service
 	@echo "✅ ML service build complete!"
 
+build-gateway: ## Build only API Gateway
+	@echo "🔨 Building API Gateway..."
+	docker-compose build api-gateway
+	@echo "✅ API Gateway build complete!"
+
+build-user: ## Build only User service  
+	@echo "🔨 Building User service..."
+	docker-compose build user-service
+	@echo "✅ User service build complete!"
+
 # Performance Testing
 load-test: ## Run basic load tests
 	@echo "⚡ Running load tests..."
@@ -176,3 +190,57 @@ status: ## Show status of all services
 	@echo "API Docs: http://localhost:8000/docs"
 	@echo "Kafka UI: http://localhost:8080"  
 	@echo "Redis Commander: http://localhost:8081"
+
+# Makefile additions for testing Phase 2
+
+# Quick test commands
+.PHONY: test-phase2 test-quick test-health test-cleanup
+
+# Full test suite
+test-phase2:
+	@chmod +x test-phase2.sh
+	@./test-phase2.sh
+
+# Updated Makefile commands with port 3001
+
+# Quick health check only
+test-health:
+	@echo "Checking service health..."
+	@curl -f http://localhost:3001/health || echo "API Gateway not responding"
+	@curl -f http://localhost:5001/health || echo "User Service not responding" 
+	@curl -f http://localhost:8000/health || echo "ML Service not responding"
+
+# Quick functionality test
+test-quick:
+	@echo "Quick functionality test..."
+	@echo "1. Creating user..."
+	@curl -X POST http://localhost:5001/api/users \
+		-H "Content-Type: application/json" \
+		-d '{"username":"quicktest","email":"quick@test.com","age":30}' | jq '.'
+	@echo "\n2. Getting recommendations..."
+	@curl http://localhost:3001/api/recommendations/user/quicktest?limit=3 | jq '.'
+	@echo "\n3. Recording interaction..."
+	@curl -X POST http://localhost:3001/api/interactions \
+		-H "Content-Type: application/json" \
+		-d '{"user_id":"quicktest","item_id":"test123","interaction_type":"view"}' | jq '.'
+
+phase2-health:
+	@echo "Checking API Gateway health..."
+	@curl -f http://localhost:3001/health || echo "API Gateway not healthy"
+	@echo "\nChecking User Service health..."
+	@curl -f http://localhost:5001/health || echo "User Service not healthy"
+	@echo "\nChecking ML Service health..."
+	@curl -f http://localhost:8000/health || echo "ML Service not healthy"
+
+# Integration test for Phase 2
+phase2-integration-test:
+	@echo "Creating test user..."
+	@curl -X POST http://localhost:5001/api/users \
+		-H "Content-Type: application/json" \
+		-d '{"username":"testuser","email":"test@example.com","age":25}'
+	@echo "\nGetting recommendations..."
+	@curl http://localhost:3001/api/recommendations/user/testuser?limit=5
+	@echo "\nRecording interaction..."
+	@curl -X POST http://localhost:3001/api/interactions \
+		-H "Content-Type: application/json" \
+		-d '{"user_id":"testuser","item_id":"item123","interaction_type":"view","rating":4.5}'

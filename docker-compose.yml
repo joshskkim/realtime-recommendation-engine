@@ -1,160 +1,217 @@
 services:
-  # Zookeeper for Kafka
-  zookeeper:
-    image: confluentinc/cp-zookeeper:7.4.0
-    hostname: zookeeper
-    container_name: zookeeper
+  # API Gateway (Node.js)
+  aapi-gateway:
+    build:
+      context: ./services/api-gateway
+      dockerfile: Dockerfile
+    container_name: rec-api-gateway
+    ports:
+      - "3001:3001"  # Changed from 8080 to 3001
     environment:
-      ZOOKEEPER_CLIENT_PORT: 2181
-      ZOOKEEPER_TICK_TIME: 2000
-    networks:
-      - recommendation-net
-    healthcheck:
-      test: ["CMD", "bash", "-c", "echo 'ruok' | nc localhost 2181"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-
-  # Kafka Broker
-  kafka:
-    image: confluentinc/cp-kafka:7.4.0
-    hostname: kafka
-    container_name: kafka
+      - NODE_ENV=development
+      - PORT=3001  # Changed internal port too
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - KAFKA_BROKERS=kafka:29092
+      - ML_SERVICE_URL=http://ml-service:8000
+      - USER_SERVICE_URL=http://user-service:5001
+      - CACHE_SERVICE_URL=http://cache-service:8082
+      - LOG_LEVEL=info
     depends_on:
-      zookeeper:
-        condition: service_healthy
-    environment:
-      KAFKA_BROKER_ID: 1
-      KAFKA_ZOOKEEPER_CONNECT: 'zookeeper:2181'
-      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:29092,PLAINTEXT_HOST://localhost:9092
-      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
-      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
-      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
-      KAFKA_AUTO_CREATE_TOPICS_ENABLE: 'true'
-      KAFKA_NUM_PARTITIONS: 3
-    ports:
-      - "9092:9092"
-      - "29092:29092"
+      - redis
+      - kafka
+      - ml-service
+      - user-service
     networks:
-      - recommendation-net
-    healthcheck:
-      test: ["CMD", "kafka-broker-api-versions", "--bootstrap-server", "localhost:9092"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-
-  # Redis Cache
-  redis:
-    image: redis:7-alpine
-    hostname: redis
-    container_name: redis
-    ports:
-      - "6379:6379"
-    command: redis-server --appendonly yes --maxmemory 512mb --maxmemory-policy allkeys-lru
+      - recommendation-network
     volumes:
-      - redis_data:/data
-      - ./infrastructure/redis/redis.conf:/etc/redis/redis.conf
-    networks:
-      - recommendation-net
+      - ./services/api-gateway:/app
+      - /app/node_modules
     healthcheck:
-      test: ["CMD", "redis-cli", "ping"]
-      interval: 10s
-      timeout: 3s
-      retries: 5
+      test: ["CMD", "curl", "-f", "http://localhost:3001/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
 
-  # PostgreSQL Database
+  # User Service (C#)
+  user-service:
+    build:
+      context: ./services/user-service
+      dockerfile: Dockerfile
+    container_name: rec-user-service
+    ports:
+      - "5001:5001"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:5001
+      - ConnectionStrings__PostgreSQL=Host=postgres;Database=userdb;Username=postgres;Password=postgres
+      - ConnectionStrings__Redis=redis:6379
+      - Kafka__BootstrapServers=kafka:29092
+      - Serilog__MinimumLevel=Information
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      kafka:
+        condition: service_healthy
+    networks:
+      - recommendation-network
+    volumes:
+      - user-service-logs:/app/logs
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5001/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # PostgreSQL for User Service
   postgres:
     image: postgres:15-alpine
-    hostname: postgres
-    container_name: postgres
-    environment:
-      POSTGRES_DB: recommendations
-      POSTGRES_USER: ${DB_USER:-recuser}
-      POSTGRES_PASSWORD: ${DB_PASSWORD:-recpass123}
+    container_name: rec-postgres
     ports:
       - "5432:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=userdb
     volumes:
-      - postgres_data:/var/lib/postgresql/data
-      - ./infrastructure/postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - postgres-data:/var/lib/postgresql/data
+      - ./scripts/init-db.sql:/docker-entrypoint-initdb.d/init.sql
     networks:
-      - recommendation-net
+      - recommendation-network
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-recuser}"]
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 10s
       timeout: 5s
       retries: 5
 
-  # ML Service (FastAPI)
+  # Existing services from Phase 1
   ml-service:
     build:
       context: ./services/ml-service
       dockerfile: Dockerfile
-    hostname: ml-service
-    container_name: ml-service
-    depends_on:
-      kafka:
-        condition: service_healthy
-      redis:
-        condition: service_healthy
-      postgres:
-        condition: service_healthy
-    environment:
-      - KAFKA_BOOTSTRAP_SERVERS=kafka:29092
-      - REDIS_URL=redis://redis:6379
-      - DATABASE_URL=postgresql://${DB_USER:-recuser}:${DB_PASSWORD:-recpass123}@postgres:5432/recommendations
-      - PYTHONPATH=/app
+    container_name: rec-ml-service
     ports:
       - "8000:8000"
+    environment:
+      - REDIS_HOST=redis
+      - KAFKA_BOOTSTRAP_SERVERS=kafka:29092
+      - LOG_LEVEL=INFO
+    depends_on:
+      - redis
+      - kafka
+    networks:
+      - recommendation-network
     volumes:
       - ./services/ml-service:/app
-      - ./datasets:/app/datasets
-    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
-    networks:
-      - recommendation-net
+      - ml-models:/app/models
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
       interval: 30s
       timeout: 10s
       retries: 3
 
-  # Kafka UI (Development Tool)
-  kafka-ui:
-    image: provectuslabs/kafka-ui:latest
-    hostname: kafka-ui
-    container_name: kafka-ui
-    depends_on:
-      kafka:
-        condition: service_healthy
-    environment:
-      KAFKA_CLUSTERS_0_NAME: local
-      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka:29092
-      KAFKA_CLUSTERS_0_ZOOKEEPER: zookeeper:2181
+  kafka:
+    image: confluentinc/cp-kafka:7.5.0
+    container_name: rec-kafka
     ports:
-      - "8080:8080"
+      - "9092:9092"
+      - "29092:29092"
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:29092,PLAINTEXT_HOST://localhost:9092
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
+    depends_on:
+      - zookeeper
     networks:
-      - recommendation-net
+      - recommendation-network
+    volumes:
+      - kafka-data:/var/lib/kafka/data
+    healthcheck:
+      test: ["CMD", "nc", "-z", "localhost", "9092"] # Checks if port 9092 is open
+      interval: 10s # Check every 10 seconds
+      timeout: 5s # Timeout for the healthcheck command
+      retries: 5 # Number of retries before marking as unhealthy
+      start_period: 15s
 
-  # Redis Commander (Development Tool)
-  redis-commander:
-    image: rediscommander/redis-commander:latest
-    hostname: redis-commander
-    container_name: redis-commander
-    depends_on:
-      redis:
-        condition: service_healthy
-    environment:
-      - REDIS_HOSTS=local:redis:6379
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.5.0
+    container_name: rec-zookeeper
     ports:
-      - "8081:8081"
+      - "2181:2181"
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
     networks:
-      - recommendation-net
+      - recommendation-network
+    volumes:
+      - zookeeper-data:/var/lib/zookeeper/data
+      - zookeeper-logs:/var/lib/zookeeper/log
+
+  redis:
+    image: redis:7-alpine
+    container_name: rec-redis
+    ports:
+      - "6379:6379"
+    command: redis-server --appendonly yes
+    networks:
+      - recommendation-network
+    volumes:
+      - redis-data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Monitoring - Prometheus
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: rec-prometheus
+    ports:
+      - "9090:9090"
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+    volumes:
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus-data:/prometheus
+    networks:
+      - recommendation-network
+
+  # Monitoring - Grafana
+  grafana:
+    image: grafana/grafana:latest
+    container_name: rec-grafana
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_INSTALL_PLUGINS=redis-datasource
+    volumes:
+      - grafana-data:/var/lib/grafana
+      - ./monitoring/grafana/dashboards:/etc/grafana/provisioning/dashboards
+      - ./monitoring/grafana/datasources:/etc/grafana/provisioning/datasources
+    networks:
+      - recommendation-network
+    depends_on:
+      - prometheus
 
 networks:
-  recommendation-net:
+  recommendation-network:
     driver: bridge
 
 volumes:
-  kafka_data:
-  redis_data:
-  postgres_data:
+  postgres-data:
+  redis-data:
+  kafka-data:
+  zookeeper-data:
+  zookeeper-logs:
+  ml-models:
+  user-service-logs:
+  prometheus-data:
+  grafana-data:
