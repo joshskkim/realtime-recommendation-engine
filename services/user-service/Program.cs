@@ -8,6 +8,8 @@ using Prometheus;
 using UserService.Data;
 using UserService.Services;
 using UserService.Models;
+using Steeltoe.Management.Endpoint;
+using Steeltoe.Management.Tracing;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -66,6 +68,14 @@ builder.Services.AddSingleton<IKafkaProducerService, KafkaProducerService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserService, UserService.Services.UserService>();
 builder.Services.AddScoped<IBusinessRulesEngine, BusinessRulesEngine>();
+
+// Add Micrometer metrics
+builder.Services.AddAllActuators(builder.Configuration);
+builder.Services.AddMetricsActuator(builder.Configuration);
+builder.Services.AddPrometheusActuator(builder.Configuration);
+
+// Add Datadog tracing
+builder.Services.Configure<TracingOptions>(builder.Configuration.GetSection("Management:Tracing"));
 
 // Add CORS
 builder.Services.AddCors(options =>
