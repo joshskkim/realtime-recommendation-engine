@@ -1,6 +1,110 @@
 services:
+  cache-service:
+    build:
+      context: ./services/cache-service
+      dockerfile: Dockerfile
+    container_name: rec-cache-service
+    ports:
+      - "8082:8082"
+    environment:
+      - CACHE_SERVICE_HOST=0.0.0.0
+      - CACHE_SERVICE_PORT=8082
+      - CACHE_SERVICE_REDIS_URL=redis://redis:6379
+      - CACHE_SERVICE_LOG_LEVEL=info
+      - CACHE_SERVICE_MAX_CONNECTIONS=50
+      - CACHE_SERVICE_CACHE_DEFAULT_TTL=3600
+    depends_on:
+      - redis
+    networks:
+      - recommendation-network
+    # volumes:
+    #   - ./services/cache-service:/app
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8082/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Kafka Streams Processor
+  stream-processor:
+    build:
+      context: ./services/stream-processor
+      dockerfile: Dockerfile
+    container_name: rec-stream-processor
+    environment:
+      - KAFKA_BROKERS=kafka:29092
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - LOG_LEVEL=INFO
+    depends_on:
+      - kafka
+      - redis
+    networks:
+      - recommendation-network
+    volumes:
+      - ./services/stream-processor:/app
+    restart: unless-stopped
+
+  # Prometheus for monitoring
+  prometheus:
+    image: prom/prometheus:v2.55.0
+    container_name: rec-prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./infrastructure/monitoring:/etc/prometheus
+      - prometheus-data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+    networks:
+      - recommendation-network
+
+  # Grafana for visualization
+  grafana:
+    image: grafana/grafana:11.3.0
+    container_name: rec-grafana
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_USERS_ALLOW_SIGN_UP=false
+    volumes:
+      - grafana-data:/var/lib/grafana
+      - ./infrastructure/monitoring/dashboards:/etc/grafana/provisioning/dashboards
+      - ./infrastructure/monitoring/datasources:/etc/grafana/provisioning/datasources
+    depends_on:
+      - prometheus
+    networks:
+      - recommendation-network
+  kafka:
+    image: confluentinc/cp-kafka:7.6.0
+    container_name: rec-kafka
+    ports:
+      - "9092:9092"
+      - "29092:29092"
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:29092,PLAINTEXT_HOST://0.0.0.0:9092
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:29092,PLAINTEXT_HOST://localhost:9092
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
+    depends_on:
+      - zookeeper
+    networks:
+      - recommendation-network
+    volumes:
+      - kafka-data:/var/lib/kafka/data
+    healthcheck:
+      test: ["CMD", "nc", "-z", "localhost", "9092"] # Checks if port 9092 is open
+      interval: 10s # Check every 10 seconds
+      timeout: 5s # Timeout for the healthcheck command
+      retries: 5 # Number of retries before marking as unhealthy
+      start_period: 15s
   # API Gateway (Node.js)
-  aapi-gateway:
+  api-gateway:
     build:
       context: ./services/api-gateway
       dockerfile: Dockerfile
@@ -15,13 +119,14 @@ services:
       - KAFKA_BROKERS=kafka:29092
       - ML_SERVICE_URL=http://ml-service:8000
       - USER_SERVICE_URL=http://user-service:5001
-      - CACHE_SERVICE_URL=http://cache-service:8082
+      - CACHE_SERVICE_URL=http://cache-service:8001
       - LOG_LEVEL=info
     depends_on:
       - redis
       - kafka
       - ml-service
       - user-service
+      - cache-service
     networks:
       - recommendation-network
     volumes:
@@ -112,34 +217,21 @@ services:
       timeout: 10s
       retries: 3
 
-  kafka:
-    image: confluentinc/cp-kafka:7.5.0
-    container_name: rec-kafka
-    ports:
-      - "9092:9092"
-      - "29092:29092"
-    environment:
-      KAFKA_BROKER_ID: 1
-      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:29092,PLAINTEXT_HOST://localhost:9092
-      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
-      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
+  kafka-ui:
+    image: provectuslabs/kafka-ui:latest
+    container_name: rec-kafka-ui
     depends_on:
-      - zookeeper
+      - kafka
+    ports:
+      - "8080:8080"
+    environment:
+      KAFKA_CLUSTERS_0_NAME: local
+      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka:29092
     networks:
       - recommendation-network
-    volumes:
-      - kafka-data:/var/lib/kafka/data
-    healthcheck:
-      test: ["CMD", "nc", "-z", "localhost", "9092"] # Checks if port 9092 is open
-      interval: 10s # Check every 10 seconds
-      timeout: 5s # Timeout for the healthcheck command
-      retries: 5 # Number of retries before marking as unhealthy
-      start_period: 15s
-
+  
   zookeeper:
-    image: confluentinc/cp-zookeeper:7.5.0
+    image: confluentinc/cp-zookeeper:7.6.0
     container_name: rec-zookeeper
     ports:
       - "2181:2181"
@@ -153,7 +245,7 @@ services:
       - zookeeper-logs:/var/lib/zookeeper/log
 
   redis:
-    image: redis:7-alpine
+    image: redis:latest
     container_name: rec-redis
     ports:
       - "6379:6379"
@@ -167,39 +259,18 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
-
-  # Monitoring - Prometheus
-  prometheus:
-    image: prom/prometheus:latest
-    container_name: rec-prometheus
-    ports:
-      - "9090:9090"
-    command:
-      - '--config.file=/etc/prometheus/prometheus.yml'
-      - '--storage.tsdb.path=/prometheus'
-    volumes:
-      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml
-      - prometheus-data:/prometheus
-    networks:
-      - recommendation-network
-
-  # Monitoring - Grafana
-  grafana:
-    image: grafana/grafana:latest
-    container_name: rec-grafana
-    ports:
-      - "3000:3000"
-    environment:
-      - GF_SECURITY_ADMIN_PASSWORD=admin
-      - GF_INSTALL_PLUGINS=redis-datasource
-    volumes:
-      - grafana-data:/var/lib/grafana
-      - ./monitoring/grafana/dashboards:/etc/grafana/provisioning/dashboards
-      - ./monitoring/grafana/datasources:/etc/grafana/provisioning/datasources
-    networks:
-      - recommendation-network
+      
+  redis-commander:
+    image: rediscommander/redis-commander:latest
+    container_name: rec-redis-commander
     depends_on:
-      - prometheus
+      - redis
+    ports:
+      - "8081:8081"
+    environment:
+      REDIS_HOSTS: local:redis:6379
+    networks:
+      - recommendation-network
 
 networks:
   recommendation-network:

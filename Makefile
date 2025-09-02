@@ -1,12 +1,6 @@
 # Real-time Recommendation Engine - Makefile
 .PHONY: help setup infra-up infra-down dev-up dev-down test-all clean logs
 
-# Default target
-help: ## Show this help message
-	@echo "Real-time Recommendation Engine - Development Commands"
-	@echo "=====================================================\n"
-	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-20s\033[0m %s\n", $$1, $$2}'
-
 # Environment Setup
 setup: ## Initial project setup (copy env files, install dependencies)
 	@echo "🚀 Setting up development environment..."
@@ -154,12 +148,6 @@ git-setup: ## Set up git hooks and aliases
 	git config --local commit.template .gitmessage
 	@echo "✅ Git setup complete!"
 
-# Documentation
-docs-serve: ## Serve documentation locally
-	@echo "📚 Starting documentation server..."
-	cd docs && python -m http.server 8082
-	@echo "📖 Documentation available at http://localhost:8082"
-
 # Production Simulation
 prod-sim: ## Run production-like environment
 	@echo "🏭 Starting production simulation..."
@@ -244,3 +232,98 @@ phase2-integration-test:
 	@curl -X POST http://localhost:3001/api/interactions \
 		-H "Content-Type: application/json" \
 		-d '{"user_id":"testuser","item_id":"item123","interaction_type":"view","rating":4.5}'
+
+.PHONY: phase3-up phase3-down phase3-test phase3-build cache-test stream-test ab-test monitoring-up
+
+phase3-build: ## Build Phase 3 services
+	@echo "🔨 Building Phase 3 services..."
+	docker-compose -f docker-compose.yml -f docker-compose.yml build
+	@echo "✅ Phase 3 build complete!"
+
+phase3-up: ## Start Phase 3 services
+	@echo "🚀 Starting Phase 3 services..."
+	docker-compose -f docker-compose.yml -f docker-compose.yml up -d
+	@echo "✅ Phase 3 services started!"
+
+phase3-down: ## Stop Phase 3 services
+	@echo "🛑 Stopping Phase 3 services..."
+	docker-compose -f docker-compose.yml -f docker-compose.yml down
+	@echo "✅ Phase 3 services stopped!"
+
+phase3-test: ## Run Phase 3 tests
+	@echo "🧪 Testing Phase 3 components..."
+	@chmod +x scripts/test-phase3.sh
+	@./scripts/test-phase3.sh
+
+## Individual Service Tests
+cache-test: ## Test Rust cache service
+	@echo "🧪 Testing cache service..."
+	@curl -f http://localhost:8082/health || echo "Cache service not healthy"
+	@echo "\nSetting test value..."
+	@curl -X PUT "http://localhost:8082/cache/test?ttl=60" \
+		-H "Content-Type: application/json" \
+		-d '"test_value"' | jq '.'
+	@echo "\nGetting test value..."
+	@curl http://localhost:8082/cache/test | jq '.'
+
+stream-test: ## Test stream processor
+	@echo "🧪 Testing stream processor..."
+	@docker logs rec-stream-processor --tail 20
+
+ab-test: ## Test A/B testing framework
+	@echo "🧪 Testing A/B framework..."
+	@curl -X POST http://localhost:8000/experiments \
+		-H "Content-Type: application/json" \
+		-d '{"name":"test","allocation":{"control":0.5,"variant":0.5}}' | jq '.'
+
+## Monitoring
+monitoring-up: ## Start monitoring stack
+	@echo "📊 Starting monitoring..."
+	docker-compose -f docker-compose.yml -f docker-compose.yml up -d prometheus grafana
+	@echo "📈 Monitoring available at:"
+	@echo "  - Prometheus: http://localhost:9090"
+	@echo "  - Grafana: http://localhost:3000 (admin/admin)"
+
+monitoring-status: ## Check monitoring status
+	@echo "📊 Monitoring Status:"
+	@curl -s http://localhost:9090/-/healthy && echo "Prometheus: ✅" || echo "Prometheus: ❌"
+	@curl -s http://localhost:3000/api/health && echo "Grafana: ✅" || echo "Grafana: ❌"
+
+cache-stats: ## Get cache statistics
+	@echo "📊 Cache Statistics:"
+	@curl -s http://localhost:8082/cache/stats | jq '.'
+
+cache-metrics: ## Get cache metrics
+	@echo "📊 Cache Metrics:"
+	@curl -s http://localhost:8082/metrics | head -50
+
+## Phase 3 Development
+phase3-logs: ## View Phase 3 service logs
+	@docker-compose -f docker-compose.yml -f docker-compose.yml logs -f cache-service stream-processor
+
+phase3-restart: ## Restart Phase 3 services
+	@make phase3-down
+	@make phase3-up
+
+phase3-reset: ## Reset Phase 3 with fresh state
+	@echo "🔄 Resetting Phase 3..."
+	@make phase3-down
+	@docker volume prune -f
+	@make phase3-build
+	@make phase3-up
+	@echo "✅ Phase 3 reset complete!"
+
+## Complete stack operations
+full-stack-up: ## Start all phases (1, 2, 3)
+	@echo "🚀 Starting complete stack..."
+	@docker-compose -f docker-compose.yml -f docker-compose.yml up -d
+	@echo "✅ All services started!"
+
+full-stack-down: ## Stop all services
+	@echo "🛑 Stopping all services..."
+	@docker-compose -f docker-compose.yml -f docker-compose.yml down
+	@echo "✅ All services stopped!"
+
+full-stack-status: ## Check status of all services
+	@echo "📊 Full Stack Status:"
+	@docker-compose -f docker-compose.yml -f docker-compose.yml ps

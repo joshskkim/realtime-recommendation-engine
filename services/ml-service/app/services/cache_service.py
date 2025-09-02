@@ -35,7 +35,7 @@ class CacheService:
                 socket_timeout=5
             )
             # Test connection
-            await self._ping()
+            self._ping()
             logger.info("✅ Redis cache service started")
         except Exception as e:
             logger.error(f"❌ Redis connection failed: {e}")
@@ -74,7 +74,7 @@ class CacheService:
         
         try:
             key = self._key_recommendations(user_id, algorithm)
-            cached = self.redis_client.get(key)
+            cached = await self.redis_client.get(key)
             if cached:
                 return json.loads(cached)
         except Exception as e:
@@ -89,7 +89,7 @@ class CacheService:
         
         try:
             key = self._key_recommendations(user_id, algorithm)
-            self.redis_client.setex(
+            await self.redis_client.setex(
                 key,
                 self.ttl_recommendations,
                 json.dumps(recommendations)
@@ -105,7 +105,7 @@ class CacheService:
         
         try:
             key = self._key_user_profile(user_id)
-            cached = self.redis_client.get(key)
+            await cached = self.redis_client.get(key)
             if cached:
                 return json.loads(cached)
         except Exception as e:
@@ -119,7 +119,7 @@ class CacheService:
         
         try:
             key = self._key_user_profile(user_id)
-            self.redis_client.setex(
+            await self.redis_client.setex(
                 key,
                 self.ttl_user_profile,
                 json.dumps(profile)
@@ -134,7 +134,7 @@ class CacheService:
         
         try:
             key = self._key_item_features(item_id)
-            cached = self.redis_client.get(key)
+            cached = await self.redis_client.get(key)
             if cached:
                 return json.loads(cached)
         except Exception as e:
@@ -148,7 +148,7 @@ class CacheService:
         
         try:
             key = self._key_item_features(item_id)
-            self.redis_client.setex(
+            await self.redis_client.setex(
                 key,
                 self.ttl_item_features,
                 json.dumps(features)
@@ -163,7 +163,7 @@ class CacheService:
         
         try:
             key = self._key_popularity(category)
-            cached = self.redis_client.get(key)
+            cached = await self.redis_client.get(key)
             if cached:
                 items = json.loads(cached)
                 return items[:limit]
@@ -178,7 +178,7 @@ class CacheService:
         
         try:
             key = self._key_popularity(category)
-            self.redis_client.setex(
+            await self.redis_client.setex(
                 key,
                 self.ttl_popularity,
                 json.dumps(items)
@@ -193,7 +193,7 @@ class CacheService:
         
         try:
             key = self._key_similar_items(item_id)
-            cached = self.redis_client.get(key)
+            cached = await self.redis_client.get(key)
             if cached:
                 return json.loads(cached)
         except Exception as e:
@@ -207,7 +207,7 @@ class CacheService:
         
         try:
             key = self._key_similar_items(item_id)
-            self.redis_client.setex(
+            await self.redis_client.setex(
                 key,
                 self.ttl_item_features,
                 json.dumps(similar_items)
@@ -228,9 +228,8 @@ class CacheService:
             ]
             
             for pattern in patterns:
-                keys = self.redis_client.keys(pattern)
-                if keys:
-                    self.redis_client.delete(*keys)
+                async for key in self.redis_client.scan_iter(pattern):
+                    await self.redis_client.delete(key)
             
             logger.debug(f"Invalidated cache for user {user_id}")
         except Exception as e:
@@ -242,7 +241,7 @@ class CacheService:
             return {"error": "Redis not connected"}
         
         try:
-            info = self.redis_client.info()
+            info = await self.redis_client.info()
             return {
                 "connected_clients": info.get("connected_clients", 0),
                 "used_memory": info.get("used_memory_human", "0B"),
