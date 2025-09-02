@@ -1,0 +1,58 @@
+# File: k8s/deployments/user-service.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: user-service
+  namespace: recommendation-system
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: user-service
+  template:
+    metadata:
+      labels:
+        app: user-service
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/path: "/metrics"
+        prometheus.io/port: "5001"
+    spec:
+      containers:
+      - name: user-service
+        image: ghcr.io/yourusername/user-service:latest
+        ports:
+        - containerPort: 5001
+        envFrom:
+        - configMapRef:
+            name: app-config
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "100m"
+          limits:
+            memory: "512Mi"
+            cpu: "200m"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 5001
+          initialDelaySeconds: 30
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 5001
+          initialDelaySeconds: 20
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: user-service
+  namespace: recommendation-system
+spec:
+  selector:
+    app: user-service
+  ports:
+  - port: 5001
+    targetPort: 5001
