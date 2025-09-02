@@ -1,5 +1,5 @@
-# File: .github/workflows/ci-cd.yml
-name: CI/CD Pipeline
+# File: .github/workflows/ci-cd-complete.yml
+name: Complete CI/CD Pipeline
 
 on:
   push:
@@ -12,55 +12,91 @@ env:
   IMAGE_PREFIX: ${{ github.repository }}
 
 jobs:
-  test:
-    name: Run Tests
+  # Security Scanning
+  security-scan:
+    name: Security Scanning
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        service: [ml-service, api-gateway, cache-service]
     steps:
       - uses: actions/checkout@v4
       
-      - name: Set up Python
-        if: matrix.service == 'ml-service'
-        uses: actions/setup-python@v4
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@master
         with:
-          python-version: '3.11'
+          scan-type: 'fs'
+          scan-ref: '.'
+          format: 'sarif'
+          output: 'trivy-results.sarif'
       
-      - name: Set up Node.js
-        if: matrix.service == 'api-gateway'
-        uses: actions/setup-node@v4
+      - name: Upload Trivy results to GitHub Security
+        uses: github/codeql-action/upload-sarif@v2
         with:
-          node-version: '20'
+          sarif_file: 'trivy-results.sarif'
       
-      - name: Set up Rust
-        if: matrix.service == 'cache-service'
-        uses: actions-rs/toolchain@v1
+      - name: Run Snyk Security Scan
+        uses: snyk/actions/python@master
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         with:
-          toolchain: stable
+          args: --severity-threshold=high
+
+  # Static Code Analysis
+  code-quality:
+    name: Code Quality Analysis
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
       
-      - name: Run tests
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      
+      - name: Run CodeQL Analysis
+        uses: github/codeql-action/analyze@v2
+
+  # Test all services
+  test-services:
+    name: Test ${{ matrix.service }}
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        service: [ml-service, api-gateway, user-service, cache-service]
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Set up test environment
         run: |
-          cd services/${{ matrix.service }}
           case "${{ matrix.service }}" in
             ml-service)
-              pip install -r requirements.txt
-              pytest tests/ --cov
+              echo "Setting up Python"
               ;;
             api-gateway)
-              npm ci
-              npm test
+              echo "Setting up Node.js"
+              ;;
+            user-service)
+              echo "Setting up .NET"
               ;;
             cache-service)
-              cargo test
+              echo "Setting up Rust"
               ;;
           esac
+      
+      - name: Run unit tests
+        run: |
+          cd services/${{ matrix.service }}
+          make test
+      
+      - name: Upload coverage
+        uses: codecov/codecov-action@v3
+        with:
+          files: ./services/${{ matrix.service }}/coverage.xml
 
-  build:
-    name: Build and Push Images
-    needs: test
+  # Build and scan containers
+  build-and-scan:
+    name: Build & Scan ${{ matrix.service }}
+    needs: [security-scan, test-services]
     runs-on: ubuntu-latest
-    if: github.event_name == 'push'
     strategy:
       matrix:
         service: [ml-service, api-gateway, user-service, cache-service, stream-processor]
@@ -70,58 +106,150 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
       
-      - name: Log in to Registry
-        uses: docker/login-action@v3
-        with:
-          registry: ${{ env.REGISTRY }}
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-      
-      - name: Extract metadata
-        id: meta
-        uses: docker/metadata-action@v5
-        with:
-          images: ${{ env.REGISTRY }}/${{ env.IMAGE_PREFIX }}-${{ matrix.service }}
-          tags: |
-            type=ref,event=branch
-            type=sha,prefix={{branch}}-
-            type=raw,value=latest,enable={{is_default_branch}}
-      
-      - name: Build and push
+      - name: Build image
         uses: docker/build-push-action@v5
         with:
           context: ./services/${{ matrix.service }}
-          push: true
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
+          tags: ${{ matrix.service }}:test
+          load: true
           cache-from: type=gha
           cache-to: type=gha,mode=max
+      
+      - name: Scan image with Trivy
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: ${{ matrix.service }}:test
+          format: 'table'
+          exit-code: '1'
+          severity: 'CRITICAL,HIGH'
+      
+      - name: Run Grype vulnerability scan
+        uses: anchore/scan-action@v3
+        with:
+          image: ${{ matrix.service }}:test
+          fail-build: true
+          severity-cutoff: high
 
-  # deploy:
-  #   name: Deploy to Kubernetes
-  #   needs: build
-  #   runs-on: ubuntu-latest
-  #   if: github.ref == 'refs/heads/main'
-  #   steps:
-  #     - uses: actions/checkout@v4
+  # Local Kubernetes testing with Kind
+  k8s-test:
+    name: Kubernetes Integration Test
+    needs: build-and-scan
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
       
-  #     - name: Install kubectl
-  #       uses: azure/setup-kubectl@v3
+      - name: Create Kind cluster
+        uses: helm/kind-action@v1.8.0
+        with:
+          cluster_name: test-cluster
+          config: |
+            kind: Cluster
+            apiVersion: kind.x-k8s.io/v1alpha4
+            nodes:
+            - role: control-plane
+            - role: worker
+            - role: worker
       
-  #     - name: Configure kubectl
-  #       run: |
-  #         mkdir -p ~/.kube
-  #         echo "${{ secrets.KUBE_CONFIG }}" | base64 -d > ~/.kube/config
+      - name: Load images to Kind
+        run: |
+          for service in ml-service api-gateway user-service cache-service stream-processor; do
+            docker build -t $service:test ./services/$service
+            kind load docker-image $service:test --name test-cluster
+          done
       
-  #     - name: Deploy to Kubernetes
-  #       run: |
-  #         kubectl apply -f k8s/base/
-  #         kubectl apply -f k8s/deployments/
-  #         kubectl -n recommendation-system rollout status deployment/ml-service
-  #         kubectl -n recommendation-system rollout status deployment/cache-service
+      - name: Install dependencies
+        run: |
+          # Install Redis
+          helm repo add bitnami https://charts.bitnami.com/bitnami
+          helm install redis bitnami/redis --set auth.enabled=false
+          
+          # Install PostgreSQL
+          helm install postgres bitnami/postgresql
       
-  #     - name: Run smoke tests
-  #       run: |
-  #         kubectl -n recommendation-system run smoke-test --rm -i --restart=Never \
-  #           --image=curlimages/curl:latest -- \
-  #           curl -f http://ml-service:8000/health
+      - name: Deploy to Kind
+        run: |
+          kubectl create namespace recommendation-system
+          kubectl apply -f k8s/base/
+          kubectl apply -f k8s/deployments/
+          
+          # Update images to use test versions
+          kubectl -n recommendation-system set image deployment/ml-service ml-service=ml-service:test
+          kubectl -n recommendation-system set image deployment/api-gateway api-gateway=api-gateway:test
+      
+      - name: Wait for deployments
+        run: |
+          kubectl -n recommendation-system wait --for=condition=available --timeout=300s deployment/ml-service
+          kubectl -n recommendation-system wait --for=condition=available --timeout=300s deployment/api-gateway
+      
+      - name: Run smoke tests
+        run: |
+          # Port forward
+          kubectl -n recommendation-system port-forward svc/ml-service 8000:8000 &
+          sleep 5
+          
+          # Test endpoints
+          curl -f http://localhost:8000/health || exit 1
+          curl -f http://localhost:8000/docs || exit 1
+      
+      - name: Run integration tests
+        run: |
+          python tests/integration/k8s_test.py
+
+  # Performance testing
+  performance-test:
+    name: Performance Testing
+    needs: k8s-test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Install k6
+        run: |
+          sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys C5AD17C747E3415A3642D57D77C6C491D6AC1D69
+          echo "deb https://dl.k6.io/deb stable main" | sudo tee /etc/apt/sources.list.d/k6.list
+          sudo apt-get update
+          sudo apt-get install k6
+      
+      - name: Run load tests
+        run: |
+          k6 run tests/performance/load-test.js --vus 10 --duration 30s
+
+  # Dependency checking
+  dependency-check:
+    name: Dependency Security Check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Check Python dependencies
+        run: |
+          pip install safety
+          cd services/ml-service
+          safety check -r requirements.txt
+      
+      - name: Check Node dependencies
+        run: |
+          cd services/api-gateway
+          npm audit --audit-level=high
+      
+      - name: Check Rust dependencies
+        run: |
+          cd services/cache-service
+          cargo audit
+
+  # Documentation validation
+  docs-check:
+    name: Documentation Check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Check markdown
+        uses: DavidAnson/markdownlint-cli2-action@v13
+        with:
+          globs: '**/*.md'
+      
+      - name: Check API documentation
+        run: |
+          # Validate OpenAPI specs
+          npx @apidevtools/swagger-cli validate docs/api-spec.yaml
