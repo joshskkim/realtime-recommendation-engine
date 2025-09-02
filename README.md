@@ -1,7 +1,5 @@
 # 🚀 Real-time Recommendation Engine
 
-<div align="center">
-
 ![Build Status](https://img.shields.io/github/workflow/status/yourusername/realtime-recommendation-engine/CI)
 ![Coverage](https://img.shields.io/codecov/c/github/yourusername/realtime-recommendation-engine)
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
@@ -14,19 +12,16 @@
 
 [📖 Documentation](./docs) | [🎮 Live Demo](https://demo.yourdomain.com) | [📊 API Docs](https://api.yourdomain.com/docs)
 
-</div>
-
 ---
 
 ## 📸 System Overview
 
-<div align="center">
-  <img src="docs/images/architecture.png" alt="System Architecture" width="800"/>
-</div>
+![System Architecture](docs/images/architecture.png)
 
 ## ✨ Key Features
 
 ### 🎯 Core Capabilities
+
 - **Real-time Recommendations**: Sub-50ms P50 latency with 12.5K RPS throughput
 - **Hybrid ML Algorithms**: Collaborative filtering, content-based, and deep learning
 - **A/B Testing Framework**: Statistical significance testing with real-time metrics
@@ -34,6 +29,7 @@
 - **Auto-scaling**: Kubernetes HPA/VPA with predictive scaling
 
 ### 🛠️ Technical Excellence
+
 - **Polyglot Architecture**: Python, Node.js, C#, Rust, Kafka Streams
 - **Event-Driven**: Kafka streaming with exactly-once semantics
 - **Observability**: Prometheus, Grafana, Datadog integration
@@ -41,8 +37,6 @@
 - **CI/CD**: Automated testing, security scanning, canary deployments
 
 ## 📊 Performance Metrics
-
-<div align="center">
 
 | Metric | Target | **Achieved** | Visual |
 |--------|--------|------------|---------|
@@ -53,13 +47,9 @@
 | **Cache Hit Rate** | >80% | **✅ 87%** | 💎✨ |
 | **Availability** | 99.9% | **✅ 99.95%** | 🛡️💯 |
 
-</div>
-
 ### 📈 Live Metrics Dashboard
 
-<div align="center">
-  <img src="docs/images/grafana-dashboard.png" alt="Grafana Dashboard" width="700"/>
-</div>
+![Grafana Dashboard](docs/images/grafana-dashboard.png)
 
 ## 🏗️ Architecture
 
@@ -116,11 +106,13 @@ graph TB
 ## 🚀 Quick Start
 
 ### Prerequisites
+
 - Docker & Docker Compose
 - Kubernetes (Minikube/Kind for local)
 - Make
 
 ### Local Development
+
 ```bash
 # Clone repository
 git clone https://github.com/yourusername/realtime-recommendation-engine
@@ -142,6 +134,7 @@ open http://localhost:9090        # Prometheus
 ```
 
 ### Kubernetes Deployment
+
 ```bash
 # Create cluster (local)
 kind create cluster --config=k8s/kind-config.yaml
@@ -159,15 +152,15 @@ make k8s-test
 ## 🧪 Testing & Quality
 
 ### Test Coverage
+
 - **Unit Tests**: 92% coverage
 - **Integration Tests**: E2E scenarios
 - **Performance Tests**: k6 load testing
 - **Security Scanning**: Trivy, Snyk, Grype
 
 ### CI/CD Pipeline
-<div align="center">
-  <img src="docs/images/cicd-pipeline.png" alt="CI/CD Pipeline" width="600"/>
-</div>
+
+![CI/CD Pipeline](docs/images/cicd-pipeline.png)
 
 ```yaml
 ✅ Security Scan → ✅ Unit Tests → ✅ Build → ✅ Container Scan → ✅ Integration Tests → ✅ Deploy
@@ -176,33 +169,33 @@ make k8s-test
 ## 📸 Screenshots
 
 ### API Documentation
-<div align="center">
-  <img src="docs/images/swagger-ui.png" alt="Swagger UI" width="700"/>
-</div>
+
+![Swagger UI](docs/images/swagger-ui.png)
 
 ### A/B Testing Dashboard
-<div align="center">
-  <img src="docs/images/ab-testing.png" alt="A/B Testing Results" width="700"/>
-</div>
+
+![A/B Testing Results](docs/images/ab-testing.png)
 
 ### Real-time Monitoring
-<div align="center">
-  <img src="docs/images/monitoring.png" alt="Monitoring Dashboard" width="700"/>
-</div>
+
+![Monitoring Dashboard](docs/images/monitoring.png)
 
 ## 🎯 Use Cases
 
 ### E-commerce
+
 - Product recommendations
 - Personalized search results
 - Cross-sell/up-sell optimization
 
 ### Content Platforms
+
 - Video/article recommendations
 - Playlist generation
 - Content discovery
 
 ### Social Networks
+
 - Friend suggestions
 - Content feed personalization
 - Interest-based grouping
@@ -210,6 +203,7 @@ make k8s-test
 ## 🛠️ Technology Stack
 
 ### Languages & Frameworks
+
 - **ML Service**: Python 3.11, FastAPI, Scikit-learn, NumPy
 - **API Gateway**: Node.js 20, Express, Redis
 - **User Service**: C# .NET 8, Entity Framework
@@ -217,6 +211,7 @@ make k8s-test
 - **Stream Processing**: Kafka Streams, Python
 
 ### Infrastructure
+
 - **Container**: Docker, Kubernetes
 - **Database**: PostgreSQL 15, Redis 7
 - **Message Queue**: Apache Kafka
@@ -256,18 +251,21 @@ git push origin feature/amazing-feature
 ## 📈 Roadmap
 
 ### Current (v3.0)
+
 - ✅ Core recommendation engine
 - ✅ Multi-service architecture
 - ✅ A/B testing framework
 - ✅ Kubernetes deployment
 
 ### Next (v4.0)
+
 - 🔄 Multi-region deployment
 - 🔄 Service mesh (Istio)
 - 🔄 Feature store integration
 - 🔄 Real-time model training
 
 ### Future
+
 - 📋 GraphQL API
 - 📋 WebAssembly modules
 - 📋 Edge computing support
@@ -299,12 +297,10 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 - **GitHub**: [@joshskkim](https://github.com/joshskkim)
 - **LinkedIn**: [Joshua Kim](https://linkedin.com/in/joshskkim)
-- **Email**: josh.sk.kim@gmail.com
+- **Email**: <josh.sk.kim@gmail.com>
 
 ---
 
-<div align="center">
-  <strong>⭐ Star this repo if you find it helpful!</strong>
-  
-  Made with ❤️ and lots of ☕
-</div>
+**⭐ Star this repo if you find it helpful!**
+
+Made with ❤️ and lots of ☕
