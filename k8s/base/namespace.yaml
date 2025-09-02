@@ -1,0 +1,8 @@
+# File: k8s/base/namespace.yaml
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: recommendation-system
+  labels:
+    name: recommendation-system
+    environment: production

@@ -1,0 +1,14 @@
+# File: k8s/optimizations/resource-quotas.yaml
+apiVersion: v1
+kind: ResourceQuota
+metadata:
+  name: recommendation-quota
+  namespace: recommendation-system
+spec:
+  hard:
+    requests.cpu: "10"
+    requests.memory: "20Gi"
+    limits.cpu: "20"
+    limits.memory: "40Gi"
+    persistentvolumeclaims: "10"
+    services.loadbalancers: "2"

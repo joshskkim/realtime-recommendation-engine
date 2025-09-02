@@ -1,0 +1,22 @@
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: ml-service-pdb
+  namespace: recommendation-system
+spec:
+  minAvailable: 1
+  selector:
+    matchLabels:
+      app: ml-service
+
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: api-gateway-pdb
+  namespace: recommendation-system
+spec:
+  minAvailable: 2
+  selector:
+    matchLabels:
+      app: api-gateway

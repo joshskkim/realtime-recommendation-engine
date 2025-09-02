@@ -1,0 +1,7 @@
+# File: helm/recommendation-system/Chart.yaml
+apiVersion: v2
+name: recommendation-system
+description: Real-time Recommendation Engine
+type: application
+version: 1.0.0
+appVersion: "3.0.0"

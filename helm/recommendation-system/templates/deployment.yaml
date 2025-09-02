@@ -1,0 +1,26 @@
+# File: helm/recommendation-system/templates/deployment.yaml
+{{- range $service := .Values.services }}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ $service.name }}
+  namespace: {{ $.Values.global.namespace }}
+spec:
+  replicas: {{ $service.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ $service.name }}
+  template:
+    metadata:
+      labels:
+        app: {{ $service.name }}
+    spec:
+      containers:
+      - name: {{ $service.name }}
+        image: "{{ $.Values.global.imageRegistry }}/{{ $service.image.repository }}:{{ $service.image.tag }}"
+        ports:
+        - containerPort: {{ $service.port }}
+        resources:
+          {{- toYaml $service.resources | nindent 10 }}
+{{- end }}

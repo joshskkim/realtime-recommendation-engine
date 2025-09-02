@@ -1,0 +1,19 @@
+# File: k8s/base/configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: app-config
+  namespace: recommendation-system
+data:
+  REDIS_HOST: "redis-service"
+  REDIS_PORT: "6379"
+  KAFKA_BOOTSTRAP_SERVERS: "kafka-service:9092"
+  POSTGRES_HOST: "postgres-service"
+  POSTGRES_PORT: "5432"
+  POSTGRES_DB: "userdb"
+  LOG_LEVEL: "INFO"
+  CACHE_SERVICE_HOST: "cache-service"
+  CACHE_SERVICE_PORT: "8082"
+  ML_SERVICE_URL: "http://ml-service:8000"
+  USER_SERVICE_URL: "http://user-service:5001"
+  

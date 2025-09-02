@@ -1,0 +1,84 @@
+# File: helm/recommendation-system/values.yaml
+global:
+  namespace: recommendation-system
+  imageRegistry: ghcr.io/yourusername
+  imagePullPolicy: IfNotPresent
+
+mlService:
+  enabled: true
+  replicaCount: 3
+  image:
+    repository: ml-service
+    tag: latest
+  resources:
+    requests:
+      memory: "512Mi"
+      cpu: "250m"
+    limits:
+      memory: "1Gi"
+      cpu: "500m"
+  autoscaling:
+    enabled: true
+    minReplicas: 2
+    maxReplicas: 10
+    targetCPUUtilizationPercentage: 70
+
+apiGateway:
+  enabled: true
+  replicaCount: 3
+  image:
+    repository: api-gateway
+    tag: latest
+  resources:
+    requests:
+      memory: "256Mi"
+      cpu: "100m"
+    limits:
+      memory: "512Mi"
+      cpu: "200m"
+
+cacheService:
+  enabled: true
+  replicaCount: 2
+  image:
+    repository: cache-service
+    tag: latest
+
+redis:
+  enabled: true
+  persistence:
+    enabled: true
+    size: 10Gi
+
+postgres:
+  enabled: true
+  persistence:
+    enabled: true
+    size: 20Gi
+  auth:
+    database: userdb
+    username: postgres
+
+kafka:
+  enabled: true
+  replicaCount: 3
+  persistence:
+    enabled: true
+    size: 50Gi
+
+monitoring:
+  prometheus:
+    enabled: true
+  grafana:
+    enabled: true
+    adminPassword: changeme
+
+ingress:
+  enabled: true
+  className: nginx
+  host: api.yourdomain.com
+  tls:
+    enabled: true
+    secretName: recommendation-tls
+
+---

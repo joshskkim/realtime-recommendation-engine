@@ -1,0 +1,28 @@
+# File: k8s/optimizations/network-policy.yaml
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: recommendation-network-policy
+  namespace: recommendation-system
+spec:
+  podSelector: {}
+  policyTypes:
+  - Ingress
+  - Egress
+  ingress:
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          name: recommendation-system
+  egress:
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          name: recommendation-system
+  - to:
+    - namespaceSelector: {}
+    ports:
+    - protocol: TCP
+      port: 53
+    - protocol: UDP
+      port: 53

@@ -327,3 +327,71 @@ full-stack-down: ## Stop all services
 full-stack-status: ## Check status of all services
 	@echo "📊 Full Stack Status:"
 	@docker-compose -f docker-compose.yml -f docker-compose.yml ps
+.PHONY: k8s-deploy k8s-delete k8s-status helm-install helm-upgrade
+
+## Kubernetes Operations
+k8s-create-namespace: ## Create Kubernetes namespace
+	kubectl create namespace recommendation-system --dry-run=client -o yaml | kubectl apply -f -
+
+k8s-deploy: ## Deploy to Kubernetes
+	@echo "🚀 Deploying to Kubernetes..."
+	kubectl apply -f k8s/base/
+	kubectl apply -f k8s/deployments/
+	kubectl apply -f k8s/monitoring/
+	kubectl apply -f k8s/optimizations/
+	@echo "✅ Deployment complete!"
+
+k8s-delete: ## Delete Kubernetes deployment
+	@echo "🗑️ Deleting Kubernetes resources..."
+	kubectl delete -f k8s/deployments/
+	kubectl delete -f k8s/base/
+	@echo "✅ Resources deleted!"
+
+k8s-status: ## Check Kubernetes deployment status
+	@echo "📊 Deployment Status:"
+	kubectl -n recommendation-system get all
+	kubectl -n recommendation-system top pods
+
+k8s-logs: ## View logs from Kubernetes pods
+	kubectl -n recommendation-system logs -l app=ml-service --tail=50
+
+## Helm Operations
+helm-install: ## Install using Helm
+	helm install recommendation ./helm/recommendation-system \
+		--namespace recommendation-system \
+		--create-namespace
+
+helm-upgrade: ## Upgrade Helm deployment
+	helm upgrade recommendation ./helm/recommendation-system \
+		--namespace recommendation-system
+
+helm-uninstall: ## Uninstall Helm deployment
+	helm uninstall recommendation --namespace recommendation-system
+
+## CI/CD Operations
+ci-test: ## Run CI tests locally
+	@echo "🧪 Running CI tests..."
+	cd services/ml-service && pytest tests/
+	cd services/api-gateway && npm test
+	cd services/cache-service && cargo test
+
+docker-build-all: ## Build all Docker images
+	@echo "🔨 Building all images..."
+	docker build -t ml-service:latest ./services/ml-service
+	docker build -t api-gateway:latest ./services/api-gateway
+	docker build -t cache-service:latest ./services/cache-service
+	docker build -t stream-processor:latest ./services/stream-processor
+
+docker-push-all: ## Push all images to registry
+	@echo "📤 Pushing images..."
+	docker tag ml-service:latest $(REGISTRY)/ml-service:latest
+	docker push $(REGISTRY)/ml-service:latest
+	# Repeat for other services
+
+## Performance Testing
+perf-test: ## Run performance tests
+	@echo "⚡ Running performance tests..."
+	k6 run tests/performance/load-test.js
+
+stress-test: ## Run stress tests
+	kubectl run -i --tty load-generator --rm --image=busybox --restart=Never -- /bin/sh
