@@ -2,23 +2,24 @@ FROM python:3.13.7-alpine3.22 AS builder
 
 WORKDIR /app
 
-# Install build dependencies
+# Install build dependencies for Alpine
 RUN apk update && apk add --no-cache \
     g++ \
     gcc \
-    libpq5 \
-    libssl-dev \
+    musl-dev \
+    openssl-dev \
+    postgresql-dev \
+    postgresql-libs \
     && rm -rf /var/cache/apk/*
 
 # Copy requirements and install
 COPY requirements.txt .
-RUN pip install --no-cache-dir --upgrade pip && \
+RUN pip install --no-cache-dir --upgrade pip setuptools wheel && \
     pip install --no-cache-dir -r requirements.txt
 
 # Copy application code
 COPY . .
 
-# Production stage
 FROM python:3.13.7-alpine3.22
 
 WORKDIR /app
@@ -26,7 +27,12 @@ WORKDIR /app
 # Upgrade system packages
 RUN apk update && apk upgrade -y --no-cache
 
-# Copy installed Python packages
+# Install runtime dependencies only
+RUN apk add --no-cache \
+    postgresql-libs \
+    openssl
+
+# Copy Python packages from builder
 COPY --from=builder /usr/local/lib/python3.13/site-packages /usr/local/lib/python3.13/site-packages
 COPY --from=builder /usr/local/bin /usr/local/bin
 
@@ -34,7 +40,7 @@ COPY --from=builder /usr/local/bin /usr/local/bin
 COPY . .
 
 # Create non-root user
-RUN useradd -m -u 1001 appuser && chown -R appuser:appuser /app
+RUN adduser -D -u 1001 appuser && chown -R appuser:appuser /app
 USER appuser
 
 EXPOSE 8000
