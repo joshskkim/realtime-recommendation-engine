@@ -1,3 +1,10 @@
+## [1.0.45](https://github.com/joshskkim/realtime-recommendation-engine/compare/v1.0.44...v1.0.45) (2025-09-03)
+
+
+### Bug Fixes
+
+* separate workflows ([6b1653f](https://github.com/joshskkim/realtime-recommendation-engine/commit/6b1653f1960caece1c04d499268d3d1800b8643e))
+
 ## [1.0.44](https://github.com/joshskkim/realtime-recommendation-engine/compare/v1.0.43...v1.0.44) (2025-09-03)
 
 
