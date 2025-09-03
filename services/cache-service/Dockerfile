@@ -1,57 +1,56 @@
-# Build stage
-FROM rust:1.82-slim AS builder
-
+#–– Planner: cache dependency resolution ––
+FROM rust:1.82-slim AS planner
 WORKDIR /app
 
-# Install build dependencies
-RUN apt-get update && apt-get install -y \
-    pkg-config \
-    libssl-dev \
-    && rm -rf /var/lib/apt/lists/*
-
-# Copy manifests
+# 1) Copy just the manifest so Docker can cache this layer
 COPY Cargo.toml ./
-RUN cargo generate-lockfile
 
-# Build dependencies (cache layer)
-RUN mkdir src && \
-    echo "fn main() {}" > src/main.rs && \
-    cargo build --release && \
-    rm -rf src
+# 2) Create a dummy main.rs so Cargo sees a binary
+RUN mkdir src \
+ && echo "fn main() {}" > src/main.rs
 
-# Copy source code
+# 3) Generate Cargo.lock and pre-fetch deps
+RUN cargo generate-lockfile \
+ && cargo fetch
+
+# 4) Clean up dummy sources
+RUN rm -rf src
+
+#–– Builder: compile your real code ––
+FROM rust:1.82-slim AS builder
+WORKDIR /app
+
+# 5) Bring in lockfile + manifest from planner
+COPY --from=planner /app/Cargo.toml /app/Cargo.lock ./
+
+# 6) Copy your actual source tree
 COPY src ./src
 
-# Build application
-RUN touch src/main.rs && \
-    cargo build --release
+# 7) Produce optimized binary
+RUN cargo build --release
 
-# Runtime stage
+#–– Runtime: slim production image ––
 FROM debian:bookworm-slim
-
 WORKDIR /app
 
-# Install runtime dependencies
 RUN apt-get update && apt-get install -y \
     ca-certificates \
     libssl3 \
-    && rm -rf /var/lib/apt/lists/*
+  && rm -rf /var/lib/apt/lists/*
 
 # Create non-root user
 RUN useradd -m -u 1001 appuser
 
-# Copy binary from builder
+# Copy the compiled binary
 COPY --from=builder /app/target/release/cache-service /app/cache-service
 
-# Set ownership
+# Fix permissions & switch user
 RUN chown -R appuser:appuser /app
-
 USER appuser
 
 EXPOSE 8082
-
-ENV RUST_LOG=info
-ENV CACHE_SERVICE_HOST=0.0.0.0
-ENV CACHE_SERVICE_PORT=8082
+ENV RUST_LOG=info \
+    CACHE_SERVICE_HOST=0.0.0.0 \
+    CACHE_SERVICE_PORT=8082
 
 CMD ["./cache-service"]

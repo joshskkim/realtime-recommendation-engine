@@ -144,7 +144,6 @@ jobs:
           - api-gateway
           - cache-service
           - stream-processor
-          - user-service
     steps:
       - uses: actions/checkout@v4
 
@@ -155,7 +154,6 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: ./services/${{ matrix.service }}
-          tags: ${{ matrix.service }}:test
           load: true
           cache-from: type=gha
           cache-to: type=gha,mode=max
@@ -165,15 +163,14 @@ jobs:
         with:
           image-ref: ${{ matrix.service }}:test
           format: table
-          exit-code: '0'
+          exit-code: '1'
           severity: CRITICAL,HIGH
 
       - name: Run Grype vulnerability scan
         uses: anchore/scan-action@v3
-        continue-on-error: true
         with:
           image: ${{ matrix.service }}:test
-          fail-build: false
+          fail-build: true
           severity-cutoff: high
 
   # Local Kubernetes testing with Kind
@@ -181,13 +178,19 @@ jobs:
     name: Kubernetes Integration Test
     needs: build-and-scan
     runs-on: ubuntu-latest
+    env:
+      IMAGE_TAG: test
+      CLUSTER_NAME: test-cluster
+      SERVICES: ml-service api-gateway cache-service stream-processor user-service
+
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
 
       - name: Create Kind cluster
         uses: helm/kind-action@v1.8.0
         with:
-          cluster_name: test-cluster
+          cluster_name: ${{ env.CLUSTER_NAME }}
           config: |
             kind: Cluster
             apiVersion: kind.x-k8s.io/v1alpha4
@@ -195,45 +198,64 @@ jobs:
               - role: control-plane
               - role: worker
 
-      - name: Load images to Kind
+      - name: Build & load images into Kind
         run: |
-          for service in ml-service api-gateway cache-service stream-processor; do
-            if [ -d "services/$service" ]; then
-              docker build -t $service:test ./services/$service || echo "Build failed for $service"
-              kind load docker-image $service:test --name test-cluster || echo "Load failed for $service"
-            fi
+          for service in $SERVICES; do
+            echo "→ Building $service"
+            docker build \
+              -t "$service:${IMAGE_TAG}" \
+              "./services/$service"
+            echo "→ Loading into Kind"
+            kind load docker-image \
+              "$service:${IMAGE_TAG}" \
+              --name "${CLUSTER_NAME}"
           done
 
-      - name: Install dependencies
+      - name: Install Redis & PostgreSQL via Helm
         run: |
           helm repo add bitnami https://charts.bitnami.com/bitnami
-          helm install redis bitnami/redis --set auth.enabled=false || echo "Redis install failed"
-          helm install postgres bitnami/postgresql || echo "PostgreSQL install failed"
+          helm repo update
 
-      - name: Deploy to Kind
+          helm upgrade --install redis bitnami/redis \
+            --version 17.8.8 \
+            --set auth.enabled=false \
+            --wait --timeout 120s
+
+          helm upgrade --install postgres bitnami/postgresql \
+            --version 12.9.7 \
+            --wait --timeout 120s
+
+      - name: Deploy application YAML
         run: |
-          kubectl create namespace recommendation-system || true
+          # Ensure namespace exists
+          kubectl create namespace recommendation-system --dry-run=client -o yaml \
+            | kubectl apply -f -
+
+          # Apply base configs
           if [ -d "k8s/base" ]; then
-            kubectl apply -f k8s/base/ || echo "Base config failed"
+            kubectl apply -f k8s/base/
           fi
+
+          # Patch image tags and apply deployments
           if [ -d "k8s/deployments" ]; then
             for file in k8s/deployments/*.yaml; do
-              if [ -f "$file" ]; then
-                sed -i 's|ghcr.io/.*:.*|test:test|g' "$file"
-              fi
+              [ -f "$file" ] || continue
+              sed -i "s|\(image: .*\):.*|\1:${IMAGE_TAG}|" "$file"
             done
-            kubectl apply -f k8s/deployments/ || echo "Deployments failed"
+            kubectl apply -f k8s/deployments/
           fi
 
-      - name: Wait for deployments
+      - name: Wait for all deployments
         run: |
-          kubectl -n recommendation-system wait --for=condition=available --timeout=300s deployment/ml-service || echo "ML service not ready"
+          kubectl -n recommendation-system wait \
+            --for=condition=available \
+            --timeout=300s deployment --all
 
       - name: Run smoke tests
         run: |
           kubectl -n recommendation-system port-forward svc/ml-service 8000:8000 &
           sleep 5
-          curl -f http://localhost:8000/health || echo "Health check failed"
+          curl -f http://localhost:8000/health
 
   # Performance testing
   performance-test:
@@ -241,25 +263,51 @@ jobs:
     needs: k8s-test
     runs-on: ubuntu-latest
     continue-on-error: true
+
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-      - name: Install k6
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y gnupg software-properties-common
-          curl -s https://dl.k6.io/key.gpg | sudo gpg --dearmor -o /usr/share/keyrings/k6-archive-keyring.gpg
-          echo "deb [signed-by=/usr/share/keyrings/k6-archive-keyring.gpg] https://dl.k6.io/deb stable main" | sudo tee /etc/apt/sources.list.d/k6.list
-          sudo apt-get update
-          sudo apt-get install -y k6
+      - name: setup k6 action
+        uses: grafana/setup-k6-action@v1
 
-      - name: Run load tests
+      - name: run k6 load tests
+        uses: grafana/run-k6-action@v1
+        with:
+          path: tests/performance/load-test.js
+
+      - name: Discover & run all k6 scripts
         run: |
-          if [ -f "tests/performance/load-test.js" ]; then
-            k6 run tests/performance/load-test.js --vus 10 --duration 30s || echo "Load test completed with issues"
-          else
-            echo "No performance tests found"
-          fi
+          for script in tests/performance/*.js; do
+            [ -f "$script" ] || continue
+            echo "→ Executing $script"
+            k6 run "$script" --vus 10 --duration 30s
+          done
+
+  # Cleanup Kind Cluster & Images
+  cleanup:
+    name: Cleanup Kind Cluster
+    needs: performance-test
+    if: always()
+    runs-on: ubuntu-latest
+    env:
+      IMAGE_TAG: test
+      CLUSTER_NAME: test-cluster
+      SERVICES: ml-service api-gateway cache-service stream-processor user-service
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Delete Kind cluster
+        run: |
+          kind delete cluster --name "${CLUSTER_NAME}"
+
+      - name: Remove Docker images
+        run: |
+          for service in $SERVICES; do
+            docker rmi "$service:${IMAGE_TAG}" || true
+          done
 
   # Dependency checking
   dependency-check:
@@ -340,4 +388,8 @@ jobs:
       - name: Semantic Release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: npx semantic-release
+        run: |
+          npx semantic-release \
+            --verify-conditions @semantic-release/github \
+            --publish @semantic-release/github \
+            --no-ci
