@@ -109,6 +109,9 @@ jobs:
             api-gateway)
               echo "Setting up Node.js"
               ;;
+            user-service)
+              echo "Setting up .NET"
+              ;;
             cache-service)
               echo "Setting up Rust"
               ;;
@@ -144,11 +147,23 @@ jobs:
           - api-gateway
           - cache-service
           - stream-processor
+          - user-service
     steps:
       - uses: actions/checkout@v4
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
+
+      - name: Check if service directory exists
+        id: check_dir
+        run: |
+          if [ -d "services/${{ matrix.service }}" ]; then
+            echo "exists=true" >> $GITHUB_OUTPUT
+            echo "✓ Directory services/${{ matrix.service }} exists"
+          else
+            echo "exists=false" >> $GITHUB_OUTPUT
+            echo "⚠️ Directory services/${{ matrix.service }} not found"
+          fi
 
       - name: Build image
         uses: docker/build-push-action@v5
@@ -159,6 +174,7 @@ jobs:
           cache-to: type=gha,mode=max
 
       - name: Scan image with Trivy
+        if: steps.check_dir.outputs.exists == 'true'
         uses: aquasecurity/trivy-action@master
         with:
           image-ref: ${{ matrix.service }}:test
