@@ -24,8 +24,8 @@ RUN apt-get update \
  && rm -rf /var/lib/apt/lists/*
 
 # Create non-root user
-RUN addgroup -g 1001 -S nodejs && \
-    adduser -S nodejs -u 1001
+RUN groupadd -g 1001 nodejs \
+    && useradd -m -u 1001 -g nodejs nodejs
 
 # Copy from builder
 COPY --from=builder --chown=nodejs:nodejs /app/node_modules ./node_modules
