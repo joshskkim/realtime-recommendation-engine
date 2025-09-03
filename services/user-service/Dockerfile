@@ -1,6 +1,6 @@
 # File: services/user-service/Dockerfile
 
-FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+FROM mcr.microsoft.com/dotnet/sdk:8.0.112 AS build
 WORKDIR /src
 
 # Copy csproj and restore dependencies
@@ -19,7 +19,7 @@ FROM build AS publish
 RUN dotnet publish -c Release -o /app/publish
 
 # Runtime stage
-FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS final
+FROM mcr.microsoft.com/dotnet/aspnet:8.0.112 AS final
 WORKDIR /app
 
 # Install curl for health checks

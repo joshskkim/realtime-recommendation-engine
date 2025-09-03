@@ -1,5 +1,5 @@
 #–– Planner: cache dependency resolution ––
-FROM rust:1.82-slim AS planner
+FROM rust:slim-trixie AS planner
 WORKDIR /app
 
 # 1) Copy just the manifest so Docker can cache this layer
@@ -17,7 +17,7 @@ RUN cargo generate-lockfile \
 RUN rm -rf src
 
 #–– Builder: compile your real code ––
-FROM rust:1.82-slim AS builder
+FROM rust:slim-trixie AS builder
 WORKDIR /app
 
 # 5) Bring in lockfile + manifest from planner
@@ -30,7 +30,7 @@ COPY src ./src
 RUN cargo build --release
 
 #–– Runtime: slim production image ––
-FROM debian:bookworm-slim
+FROM debian:trixie-slim
 WORKDIR /app
 
 RUN apt-get update && apt-get install -y \

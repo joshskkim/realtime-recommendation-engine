@@ -1,9 +1,11 @@
-FROM node:20-alpine AS builder
+FROM node:lts-trixie-slim AS builder
 
 WORKDIR /app
 
 # Copy package files
 COPY package*.json ./
+
+RUN apk update && apk upgrade
 
 # Install dependencies with security audit
 RUN npm ci --only=production && \
@@ -13,12 +15,12 @@ RUN npm ci --only=production && \
 COPY . .
 
 # Production stage
-FROM node:20-alpine
+FROM node:lts-trixie-slim
 
 WORKDIR /app
 
 # Install dumb-init for proper signal handling
-RUN apk add --no-cache dumb-init
+RUN apk update && apk upgrade && apk add --no-cache dumb-init
 
 # Create non-root user
 RUN addgroup -g 1001 -S nodejs && \
