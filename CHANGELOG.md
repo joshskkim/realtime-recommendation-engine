@@ -1,3 +1,11 @@
+## [1.0.41](https://github.com/joshskkim/realtime-recommendation-engine/compare/v1.0.40...v1.0.41) (2025-09-03)
+
+
+### Bug Fixes
+
+* pkg config ([f0af7da](https://github.com/joshskkim/realtime-recommendation-engine/commit/f0af7da400784e72e65592bd65597ac820ff8ee9))
+* pkg config ([75f135f](https://github.com/joshskkim/realtime-recommendation-engine/commit/75f135ff4e67be348a87a02c3796322831a5f622))
+
 ## [1.0.40](https://github.com/joshskkim/realtime-recommendation-engine/compare/v1.0.39...v1.0.40) (2025-09-03)
 
 
