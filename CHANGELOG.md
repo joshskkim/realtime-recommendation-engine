@@ -1,3 +1,10 @@
+## [1.0.30](https://github.com/joshskkim/realtime-recommendation-engine/compare/v1.0.29...v1.0.30) (2025-09-03)
+
+
+### Bug Fixes
+
+* user service dockerfile ([25444bd](https://github.com/joshskkim/realtime-recommendation-engine/commit/25444bd2f289b541f10822e817245f9618b9a9a6))
+
 ## [1.0.29](https://github.com/joshskkim/realtime-recommendation-engine/compare/v1.0.28...v1.0.29) (2025-09-03)
 
 
