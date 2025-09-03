@@ -1,3 +1,10 @@
+## [1.0.39](https://github.com/joshskkim/realtime-recommendation-engine/compare/v1.0.38...v1.0.39) (2025-09-03)
+
+
+### Bug Fixes
+
+* gfortan ([164a1d7](https://github.com/joshskkim/realtime-recommendation-engine/commit/164a1d7e5e1406895968b7814640b7915e79359a))
+
 ## [1.0.38](https://github.com/joshskkim/realtime-recommendation-engine/compare/v1.0.37...v1.0.38) (2025-09-03)
 
 
