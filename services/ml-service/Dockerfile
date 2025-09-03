@@ -13,6 +13,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libffi-dev \
     libopenblas-dev \
     libpq-dev \
+    pkg-config \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Upgrade pip and install Python build tools
