@@ -1,3 +1,10 @@
+## [1.0.2](https://github.com/joshskkim/realtime-recommendation-engine/compare/v1.0.1...v1.0.2) (2025-09-03)
+
+
+### Bug Fixes
+
+* docker versions for vulnerabilities ([c1126df](https://github.com/joshskkim/realtime-recommendation-engine/commit/c1126dfa9e932a290f0c5fc894dd840de9dd4416))
+
 ## [1.0.1](https://github.com/joshskkim/realtime-recommendation-engine/compare/v1.0.0...v1.0.1) (2025-09-03)
 
 
