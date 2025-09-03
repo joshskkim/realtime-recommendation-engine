@@ -1,3 +1,10 @@
+## [1.0.44](https://github.com/joshskkim/realtime-recommendation-engine/compare/v1.0.43...v1.0.44) (2025-09-03)
+
+
+### Bug Fixes
+
+* services/stream-processor/requirements.txt to reduce vulnerabilities ([89b5655](https://github.com/joshskkim/realtime-recommendation-engine/commit/89b56556d59c29efddd97aedbccf063e53cdd99d))
+
 ## [1.0.43](https://github.com/joshskkim/realtime-recommendation-engine/compare/v1.0.42...v1.0.43) (2025-09-03)
 
 
