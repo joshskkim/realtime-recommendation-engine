@@ -1,3 +1,10 @@
+## [1.0.9](https://github.com/joshskkim/realtime-recommendation-engine/compare/v1.0.8...v1.0.9) (2025-09-03)
+
+
+### Bug Fixes
+
+* update steeltoe ([8dd818d](https://github.com/joshskkim/realtime-recommendation-engine/commit/8dd818d88bf1ffc59c6d81a266257fb1d3654f41))
+
 ## [1.0.8](https://github.com/joshskkim/realtime-recommendation-engine/compare/v1.0.7...v1.0.8) (2025-09-03)
 
 
