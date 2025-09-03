@@ -1,3 +1,10 @@
+## [1.0.46](https://github.com/joshskkim/realtime-recommendation-engine/compare/v1.0.45...v1.0.46) (2025-09-03)
+
+
+### Bug Fixes
+
+* trivy ignore config ([e22b745](https://github.com/joshskkim/realtime-recommendation-engine/commit/e22b74534ebf18207980dcb769bbd9690016a7dd))
+
 ## [1.0.45](https://github.com/joshskkim/realtime-recommendation-engine/compare/v1.0.44...v1.0.45) (2025-09-03)
 
 
