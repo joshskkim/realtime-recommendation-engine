@@ -102,27 +102,51 @@ spec:
                         target:
                           type: object
                           additionalProperties:
-                            anyOf:
-                            - type: integer
-                            - type: string
+                            type: string
+                            pattern: '^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?
+  scope: Namespaced
+  names:
+    plural: verticalpodautoscalers
+    singular: verticalpodautoscaler
+    kind: VerticalPodAutoscaler
+    shortNames:
+    - vpa
                         lowerBound:
                           type: object
                           additionalProperties:
-                            anyOf:
-                            - type: integer
-                            - type: string
+                            type: string
+                            pattern: '^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?
+  scope: Namespaced
+  names:
+    plural: verticalpodautoscalers
+    singular: verticalpodautoscaler
+    kind: VerticalPodAutoscaler
+    shortNames:
+    - vpa
                         upperBound:
                           type: object
                           additionalProperties:
-                            anyOf:
-                            - type: integer
-                            - type: string
+                            type: string
+                            pattern: '^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?
+  scope: Namespaced
+  names:
+    plural: verticalpodautoscalers
+    singular: verticalpodautoscaler
+    kind: VerticalPodAutoscaler
+    shortNames:
+    - vpa
                         uncappedTarget:
                           type: object
                           additionalProperties:
-                            anyOf:
-                            - type: integer
-                            - type: string
+                            type: string
+                            pattern: '^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?
+  scope: Namespaced
+  names:
+    plural: verticalpodautoscalers
+    singular: verticalpodautoscaler
+    kind: VerticalPodAutoscaler
+    shortNames:
+    - vpa
   scope: Namespaced
   names:
     plural: verticalpodautoscalers
