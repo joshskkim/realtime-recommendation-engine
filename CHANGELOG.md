@@ -1,3 +1,10 @@
+## [1.0.33](https://github.com/joshskkim/realtime-recommendation-engine/compare/v1.0.32...v1.0.33) (2025-09-03)
+
+
+### Bug Fixes
+
+* grype trivy ([3cbc8f8](https://github.com/joshskkim/realtime-recommendation-engine/commit/3cbc8f8c554dac11b7c49585b8bf29b54b09358b))
+
 ## [1.0.32](https://github.com/joshskkim/realtime-recommendation-engine/compare/v1.0.31...v1.0.32) (2025-09-03)
 
 
