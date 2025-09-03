@@ -5,9 +5,9 @@ metadata:
   name: datadog-secret
   namespace: recommendation-system
 type: Opaque
-data:
-  api-key: <base64-encoded-api-key>
-  app-key: <base64-encoded-app-key>
+stringData:   # use stringData instead of data
+  api-key: "dummy"
+  app-key: "dummy"
 
 ---
 apiVersion: apps/v1
