@@ -3,17 +3,14 @@ using Microsoft.EntityFrameworkCore;
 using Confluent.Kafka;
 using StackExchange.Redis;
 using Serilog;
-using System.Text.Json;
 using Prometheus;
 using UserService.Data;
 using UserService.Services;
 using UserService.Models;
-using Steeltoe.Management.Endpoint;
-using Steeltoe.Management.Tracing;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Configure Serilog
+// Serilog
 Log.Logger = new LoggerConfiguration()
     .ReadFrom.Configuration(builder.Configuration)
     .WriteTo.Console()
@@ -22,34 +19,30 @@ Log.Logger = new LoggerConfiguration()
 
 builder.Host.UseSerilog();
 
-// Add services
+// Services
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+// Health checks
 builder.Services.AddHealthChecks()
     .AddDbContextCheck<UserDbContext>()
     .AddRedis(builder.Configuration.GetConnectionString("Redis") ?? "localhost:6379");
 
-// Configure Entity Framework
+// EF Core
 builder.Services.AddDbContext<UserDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("PostgreSQL")));
 
-// Centralize Redis configuration
-var redisConnectionString = builder.Configuration.GetConnectionString("Redis");
-if (string.IsNullOrWhiteSpace(redisConnectionString))
-{
-    Log.Warning("Redis connection string not found. Falling back to localhost:6379");
-    redisConnectionString = "localhost:6379";
-}
-
+// Redis
+var redisConnectionString = builder.Configuration.GetConnectionString("Redis") ?? "localhost:6379";
 builder.Services.AddSingleton<IConnectionMultiplexer>(sp =>
 {
-    var configuration = ConfigurationOptions.Parse(redisConnectionString);
-    configuration.AbortOnConnectFail = false;
-    return ConnectionMultiplexer.Connect(configuration);
+    var config = StackExchange.Redis.ConfigurationOptions.Parse(redisConnectionString);
+    config.AbortOnConnectFail = false;
+    return ConnectionMultiplexer.Connect(config);
 });
 
-// Configure Kafka
+// Kafka
 builder.Services.AddSingleton<IProducer<string, string>>(sp =>
 {
     var config = new ProducerConfig
@@ -61,28 +54,23 @@ builder.Services.AddSingleton<IProducer<string, string>>(sp =>
     return new ProducerBuilder<string, string>(config).Build();
 });
 
-// Kafka cleanup service for graceful shutdown
 builder.Services.AddHostedService<KafkaProducerCleanupService>();
 
+// Business logic services
 builder.Services.AddSingleton<IKafkaProducerService, KafkaProducerService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserService, UserService.Services.UserService>();
 builder.Services.AddScoped<IBusinessRulesEngine, BusinessRulesEngine>();
 
-// Add Micrometer metrics
-builder.Services.AddAllActuators(builder.Configuration);
-builder.Services.AddMetricsActuator(builder.Configuration);
-builder.Services.AddPrometheusActuator(builder.Configuration);
+// Prometheus metrics (prometheus-net)
+builder.Services.AddHttpMetrics();
 
-// Add Datadog tracing
-builder.Services.Configure<TracingOptions>(builder.Configuration.GetSection("Management:Tracing"));
-
-// Add CORS
+// CORS
 builder.Services.AddCors(options =>
 {
     options.AddDefaultPolicy(policy =>
     {
-        policy.WithOrigins("https://your-frontend-domain.com") // Replace with actual domain
+        policy.WithOrigins("https://your-frontend-domain.com")
               .AllowAnyMethod()
               .AllowAnyHeader();
     });
@@ -90,7 +78,7 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
-// Configure middleware
+// Middleware
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -103,20 +91,23 @@ else
 }
 
 app.UseSerilogRequestLogging();
-app.UseHttpMetrics();
 app.UseCors();
 app.UseRouting();
+
+// Prometheus endpoints
+app.UseMetricServer();   // /metrics
+app.UseHttpMetrics();    // automatic HTTP metrics
+
 app.MapControllers();
 app.MapHealthChecks("/health");
-app.MapMetrics();
 
-// Run database migrations
+// Run DB migrations
 using (var scope = app.Services.CreateScope())
 {
-    var dbContext = scope.ServiceProvider.GetRequiredService<UserDbContext>();
+    var db = scope.ServiceProvider.GetRequiredService<UserDbContext>();
     try
     {
-        dbContext.Database.Migrate();
+        db.Database.Migrate();
         Log.Information("✅ Database migrated successfully");
     }
     catch (Exception ex)
@@ -128,15 +119,12 @@ using (var scope = app.Services.CreateScope())
 app.Run();
 
 
-// KafkaProducerCleanupService.cs
+// Kafka cleanup service
 public class KafkaProducerCleanupService : IHostedService
 {
     private readonly IProducer<string, string> _producer;
 
-    public KafkaProducerCleanupService(IProducer<string, string> producer)
-    {
-        _producer = producer;
-    }
+    public KafkaProducerCleanupService(IProducer<string, string> producer) => _producer = producer;
 
     public Task StartAsync(CancellationToken cancellationToken) => Task.CompletedTask;
 
