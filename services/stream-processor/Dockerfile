@@ -6,6 +6,7 @@ WORKDIR /app
 RUN apk update && apk add --no-cache \
     blas-dev \
     build-base \
+    gfortran \
     lapack-dev \
     libffi-dev \
     musl-dev \
