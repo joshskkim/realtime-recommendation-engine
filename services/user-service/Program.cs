@@ -8,6 +8,8 @@ using Prometheus;
 using UserService.Data;
 using UserService.Services;
 using UserService.Models;
+using Steeltoe.Management.Endpoint;
+using Steeltoe.Management.Tracing;
 
 var builder = WebApplication.CreateBuilder(args);
 
