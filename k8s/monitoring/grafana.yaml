@@ -24,7 +24,7 @@ spec:
           valueFrom:
             secretKeyRef:
               name: app-secrets
-              key: ${GF_SECURITY_ADMIN_PASSWORD}
+              key: grafana-admin-password
         volumeMounts:
         - name: data
           mountPath: /var/lib/grafana
