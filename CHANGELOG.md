@@ -1,3 +1,10 @@
+## [1.0.47](https://github.com/joshskkim/realtime-recommendation-engine/compare/v1.0.46...v1.0.47) (2025-09-03)
+
+
+### Bug Fixes
+
+* k8s integration and trivy ignore ([f9e0523](https://github.com/joshskkim/realtime-recommendation-engine/commit/f9e05233b6355b00d407c8f62b71f6c71d1546d8))
+
 ## [1.0.46](https://github.com/joshskkim/realtime-recommendation-engine/compare/v1.0.45...v1.0.46) (2025-09-03)
 
 
