@@ -1,3 +1,10 @@
+## [1.0.13](https://github.com/joshskkim/realtime-recommendation-engine/compare/v1.0.12...v1.0.13) (2025-09-03)
+
+
+### Bug Fixes
+
+* python vulnerabilties ([54666bd](https://github.com/joshskkim/realtime-recommendation-engine/commit/54666bd1e42397b5c482831f72a48651c4cad167))
+
 ## [1.0.12](https://github.com/joshskkim/realtime-recommendation-engine/compare/v1.0.11...v1.0.12) (2025-09-03)
 
 
