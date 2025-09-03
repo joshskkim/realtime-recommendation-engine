@@ -1,3 +1,10 @@
+## [1.0.4](https://github.com/joshskkim/realtime-recommendation-engine/compare/v1.0.3...v1.0.4) (2025-09-03)
+
+
+### Bug Fixes
+
+* remove line ([bc28227](https://github.com/joshskkim/realtime-recommendation-engine/commit/bc28227b266ea93b0a370a0072334f7aa8fb2726))
+
 ## [1.0.3](https://github.com/joshskkim/realtime-recommendation-engine/compare/v1.0.2...v1.0.3) (2025-09-03)
 
 
