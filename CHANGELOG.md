@@ -1,3 +1,10 @@
+## [1.0.56](https://github.com/joshskkim/realtime-recommendation-engine/compare/v1.0.55...v1.0.56) (2025-09-03)
+
+
+### Bug Fixes
+
+* v1 crds ([90b067b](https://github.com/joshskkim/realtime-recommendation-engine/commit/90b067b8eb6355535c795b072c91d86c748c93d0))
+
 ## [1.0.55](https://github.com/joshskkim/realtime-recommendation-engine/compare/v1.0.54...v1.0.55) (2025-09-03)
 
 
