@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+FROM cgr.dev/chainguard/dotnet-aspnet:8.0 AS build
 WORKDIR /src
 
 # Copy solution and projects for caching
@@ -16,7 +16,7 @@ FROM build AS publish
 RUN dotnet publish -c Release -o /app/publish
 
 # Runtime
-FROM mcr.microsoft.com/dotnet/aspnet:8.0-bookworm-slim AS final
+FROM cgr.dev/chainguard/dotnet-aspnet:8.0 AS final
 WORKDIR /app
 
 # Optional minimal runtime dependencies
