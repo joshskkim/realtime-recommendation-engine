@@ -1,48 +1,62 @@
-FROM python:3.13.7-alpine3.22 AS builder
+# File: services/user-service/Dockerfile
+
+# Use specific .NET version
+FROM mcr.microsoft.com/dotnet/sdk:8.0.101-alpine3.19 AS build
+
+WORKDIR /src
+
+# Copy project file
+COPY *.csproj ./
+RUN dotnet restore
+
+# Copy source code
+COPY . ./
+
+# Build with security optimizations
+RUN dotnet build -c Release -o /app/build \
+    -p:PublishTrimmed=true \
+    -p:PublishSingleFile=true \
+    -p:DebugType=None \
+    -p:DebugSymbols=false
+
+# Publish
+RUN dotnet publish -c Release -o /app/publish \
+    -p:PublishTrimmed=true \
+    -p:PublishSingleFile=true \
+    -p:DebugType=None \
+    -p:DebugSymbols=false
+
+# Runtime stage - use distroless for minimal attack surface
+FROM mcr.microsoft.com/dotnet/runtime-deps:8.0-alpine3.19
+
+# Install security updates
+RUN apk update && \
+    apk upgrade && \
+    apk add --no-cache curl && \
+    rm -rf /var/cache/apk/*
 
 WORKDIR /app
 
-# Install build dependencies for Alpine
-RUN apk update && apk add --no-cache \
-    g++ \
-    gcc \
-    musl-dev \
-    openssl-dev \
-    postgresql-dev \
-    postgresql-libs \
-    && rm -rf /var/cache/apk/*
-
-# Copy requirements and install
-COPY requirements.txt .
-RUN pip install --no-cache-dir --upgrade pip setuptools wheel && \
-    pip install --no-cache-dir -r requirements.txt
-
-# Copy application code
-COPY . .
-
-FROM python:3.13.7-alpine3.22
-
-WORKDIR /app
-
-# Upgrade system packages
-RUN apk update && apk upgrade -y --no-cache
-
-# Install runtime dependencies only
-RUN apk add --no-cache \
-    postgresql-libs \
-    openssl
-
-# Copy Python packages from builder
-COPY --from=builder /usr/local/lib/python3.13/site-packages /usr/local/lib/python3.13/site-packages
-COPY --from=builder /usr/local/bin /usr/local/bin
-
-# Copy application
-COPY . .
+# Copy published app
+COPY --from=build /app/publish .
 
 # Create non-root user
-RUN adduser -D -u 1001 appuser && chown -R appuser:appuser /app
-USER appuser
+RUN addgroup -g 1001 -S dotnet && \
+    adduser -S dotnet -u 1001 -G dotnet && \
+    chown -R dotnet:dotnet /app
 
-EXPOSE 8000
+# Switch to non-root user
+USER dotnet
 
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
+# Health check
+HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
+    CMD curl -f http://localhost:5001/health || exit 1
+
+EXPOSE 5001
+
+ENV ASPNETCORE_URLS=http://+:5001 \
+    ASPNETCORE_ENVIRONMENT=Production \
+    DOTNET_RUNNING_IN_CONTAINER=true \
+    DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=1
+
+ENTRYPOINT ["./UserService"]
