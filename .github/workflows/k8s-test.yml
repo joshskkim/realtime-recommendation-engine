@@ -85,6 +85,11 @@ jobs:
             kubectl rollout status deployment --all -n monitoring --timeout=180s || true
           fi
       
+      - name: Install VPA CRDs
+        run: |
+          kubectl apply -f https://github.com/kubernetes/autoscaler/releases/download/vertical-pod-autoscaler-0.13.1/vpa-v1-crd.yaml
+          kubectl apply -f https://github.com/kubernetes/autoscaler/releases/download/vertical-pod-autoscaler-0.13.1/vpa-v1-controller.yaml
+      
       - name: Deploy optimizations
         run: |
           if [ -d "k8s/optimizations" ]; then
