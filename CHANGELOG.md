@@ -1,3 +1,10 @@
+## [1.0.26](https://github.com/joshskkim/realtime-recommendation-engine/compare/v1.0.25...v1.0.26) (2025-09-03)
+
+
+### Bug Fixes
+
+* bookworm ([4c082a9](https://github.com/joshskkim/realtime-recommendation-engine/commit/4c082a91e4330d074eaefc0848156d8b1079efa8))
+
 ## [1.0.25](https://github.com/joshskkim/realtime-recommendation-engine/compare/v1.0.24...v1.0.25) (2025-09-03)
 
 
