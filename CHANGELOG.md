@@ -1,3 +1,10 @@
+## [1.0.53](https://github.com/joshskkim/realtime-recommendation-engine/compare/v1.0.52...v1.0.53) (2025-09-03)
+
+
+### Bug Fixes
+
+* namespaces ([8f0e69a](https://github.com/joshskkim/realtime-recommendation-engine/commit/8f0e69aa4f5342269bd4155f18a951c4bf9a63ae))
+
 ## [1.0.52](https://github.com/joshskkim/realtime-recommendation-engine/compare/v1.0.51...v1.0.52) (2025-09-03)
 
 
