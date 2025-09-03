@@ -1,3 +1,10 @@
+## [1.0.28](https://github.com/joshskkim/realtime-recommendation-engine/compare/v1.0.27...v1.0.28) (2025-09-03)
+
+
+### Bug Fixes
+
+* chainguard ([2a532b0](https://github.com/joshskkim/realtime-recommendation-engine/commit/2a532b04d2c87d868b90961a8a195d5619f19d81))
+
 ## [1.0.27](https://github.com/joshskkim/realtime-recommendation-engine/compare/v1.0.26...v1.0.27) (2025-09-03)
 
 
