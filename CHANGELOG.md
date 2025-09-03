@@ -1,3 +1,10 @@
+## [1.0.49](https://github.com/joshskkim/realtime-recommendation-engine/compare/v1.0.48...v1.0.49) (2025-09-03)
+
+
+### Bug Fixes
+
+* kustomization files ([fdf3a89](https://github.com/joshskkim/realtime-recommendation-engine/commit/fdf3a89067e298a7c6adf9d6b769a89a2b1b79d7))
+
 ## [1.0.48](https://github.com/joshskkim/realtime-recommendation-engine/compare/v1.0.47...v1.0.48) (2025-09-03)
 
 
