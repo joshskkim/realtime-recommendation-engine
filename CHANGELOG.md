@@ -1,3 +1,11 @@
+## [1.0.32](https://github.com/joshskkim/realtime-recommendation-engine/compare/v1.0.31...v1.0.32) (2025-09-03)
+
+
+### Bug Fixes
+
+* false positive vuln ([d988b65](https://github.com/joshskkim/realtime-recommendation-engine/commit/d988b65ee0d1b23d13419264bd93eefe49517ae0))
+* merge ([abe5576](https://github.com/joshskkim/realtime-recommendation-engine/commit/abe5576d6b3019fca43561f95bb659390e3b1467))
+
 ## [1.0.31](https://github.com/joshskkim/realtime-recommendation-engine/compare/v1.0.30...v1.0.31) (2025-09-03)
 
 
