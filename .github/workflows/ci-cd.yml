@@ -34,7 +34,7 @@ jobs:
           output: trivy-results.sarif
 
       - name: Upload Trivy results to GitHub Security
-        uses: github/codeql-action/upload-sarif@v2
+        uses: github/codeql-action/upload-sarif@v3
         if: always()
         with:
           sarif_file: trivy-results.sarif
@@ -47,6 +47,7 @@ jobs:
           else
             echo "has_token=false" >> "$GITHUB_OUTPUT"
             echo "⚠️ Snyk token not configured, skipping Snyk scan"
+          fi
 
       - name: Run Snyk Security Scan
         if: steps.check_snyk.outputs.has_token == 'true'
@@ -72,6 +73,7 @@ jobs:
           else
             echo "has_token=false" >> "$GITHUB_OUTPUT"
             echo "⚠️ Sonar token not configured, skipping SonarCloud scan"
+          fi
 
       - name: SonarQube Scan
         if: steps.check_sonar.outputs.has_token == 'true'
@@ -272,9 +274,11 @@ jobs:
 
       - name: Check Python dependencies
         run: |
-          pip install safety
-          cd services/ml-service
-          safety scan --policy-file /dev/null || echo "Some vulnerabilities remain"
+          if [ -d "services/ml-service" ]; then
+            pip install safety
+            cd services/ml-service
+            safety scan --policy-file /dev/null || echo "Some vulnerabilities remain"
+          fi
 
       - name: Check Node dependencies
         run: |
@@ -288,6 +292,7 @@ jobs:
           if [ -d "services/cache-service" ]; then
             cd services/cache-service
             cargo audit || echo "Cargo audit not available"
+          fi
 
   # Documentation validation
   docs-check:
@@ -329,6 +334,7 @@ jobs:
         run: |
           if [ -f "docs/api-spec.yaml" ]; then
             npx @apidevtools/swagger-cli validate docs/api-spec.yaml || echo "API spec validation failed"
+          fi
 
       - name: Semantic Release
         env:
