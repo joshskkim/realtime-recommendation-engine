@@ -8,6 +8,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
     g++ \
     gcc \
+    gfortran \
     libffi-dev \
     libopenblas-dev \
     libpq-dev \

@@ -194,7 +194,6 @@ jobs:
           image: ${{ matrix.service }}:test
           fail-build: true
           severity-cutoff: critical
-          grype-ignore: 'grype-ignore.yaml'
 
   # Local Kubernetes testing with Kind
   k8s-test:

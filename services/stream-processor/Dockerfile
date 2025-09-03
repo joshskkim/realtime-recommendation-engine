@@ -5,6 +5,7 @@ WORKDIR /app
 # Install build dependencies for compiling packages like numpy
 RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
+    gfortran \
     libffi-dev \
     libopenblas-dev \
     libpq-dev \
