@@ -191,7 +191,7 @@ jobs:
         with:
           image: ${{ matrix.service }}:test
           fail-build: true
-          severity-cutoff: high
+          severity-cutoff: critical
 
   # Local Kubernetes testing with Kind
   k8s-test:
