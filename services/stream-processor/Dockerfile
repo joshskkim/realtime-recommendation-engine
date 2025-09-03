@@ -1,5 +1,5 @@
 # Dockerfile for Stream Processor
-FROM python:3.9.23-trixie
+FROM python:3.11-trixie
 
 WORKDIR /app
 

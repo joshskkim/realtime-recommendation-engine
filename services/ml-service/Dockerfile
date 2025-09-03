@@ -1,4 +1,4 @@
-FROM python:3.9.23-trixie AS builder
+FROM python:3.11-trixie AS builder
 
 WORKDIR /app
 
@@ -16,7 +16,7 @@ RUN pip install --no-cache-dir --upgrade pip && \
     pip install --no-cache-dir -r requirements.txt
 
 # Production stage
-FROM python:3.9.23-trixie
+FROM python:3.11-trixie
 
 WORKDIR /app
 
