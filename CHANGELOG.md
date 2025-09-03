@@ -1,3 +1,10 @@
+## [1.0.52](https://github.com/joshskkim/realtime-recommendation-engine/compare/v1.0.51...v1.0.52) (2025-09-03)
+
+
+### Bug Fixes
+
+* dummy ([062bb52](https://github.com/joshskkim/realtime-recommendation-engine/commit/062bb522600b2bbe16168abccf3be8c087c0b1cb))
+
 ## [1.0.51](https://github.com/joshskkim/realtime-recommendation-engine/compare/v1.0.50...v1.0.51) (2025-09-03)
 
 
