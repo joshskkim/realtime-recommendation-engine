@@ -1,7 +1,7 @@
 # -------------------------
 # Builder stage
 # -------------------------
-FROM python:3.11-slim-bullseye AS builder
+FROM python:3.13.7-alpine3.22 AS builder
 
 WORKDIR /app
 
@@ -36,4 +36,4 @@ USER nonroot
 EXPOSE 8000
 
 # Run your application
-CMD ["stream_processor.py"]
+CMD ["python3", "/app/stream_processor.py"]
