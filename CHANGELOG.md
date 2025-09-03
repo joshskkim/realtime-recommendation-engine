@@ -1,3 +1,10 @@
+## [1.0.40](https://github.com/joshskkim/realtime-recommendation-engine/compare/v1.0.39...v1.0.40) (2025-09-03)
+
+
+### Bug Fixes
+
+* cmake ([075c281](https://github.com/joshskkim/realtime-recommendation-engine/commit/075c281ee58b39cb0fd99d5e32a95ae60f483674))
+
 ## [1.0.39](https://github.com/joshskkim/realtime-recommendation-engine/compare/v1.0.38...v1.0.39) (2025-09-03)
 
 
