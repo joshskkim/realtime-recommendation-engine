@@ -1,3 +1,11 @@
+## [1.0.35](https://github.com/joshskkim/realtime-recommendation-engine/compare/v1.0.34...v1.0.35) (2025-09-03)
+
+
+### Bug Fixes
+
+* merge ([78baa00](https://github.com/joshskkim/realtime-recommendation-engine/commit/78baa001bfec39cf18035e031e497dc7ddddef1e))
+* python dependencies ([ae7c513](https://github.com/joshskkim/realtime-recommendation-engine/commit/ae7c513c6a483dc1cfcb2c3b97636c29d733dafa))
+
 ## [1.0.34](https://github.com/joshskkim/realtime-recommendation-engine/compare/v1.0.33...v1.0.34) (2025-09-03)
 
 
