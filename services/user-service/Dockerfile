@@ -2,8 +2,7 @@ FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
 
 # Copy solution and projects for caching
-COPY *.sln ./
-COPY */*.csproj ./
+COPY *.csproj ./
 RUN dotnet restore
 
 # Copy source code
