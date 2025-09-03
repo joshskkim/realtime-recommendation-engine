@@ -5,8 +5,6 @@ WORKDIR /app
 # Copy package files
 COPY package*.json ./
 
-RUN apk update && apk upgrade
-
 # Install dependencies with security audit
 RUN npm ci --only=production && \
     npm audit fix --force
