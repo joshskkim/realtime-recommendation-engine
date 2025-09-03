@@ -1,3 +1,10 @@
+## [1.0.36](https://github.com/joshskkim/realtime-recommendation-engine/compare/v1.0.35...v1.0.36) (2025-09-03)
+
+
+### Bug Fixes
+
+* slim image ([13a1ffc](https://github.com/joshskkim/realtime-recommendation-engine/commit/13a1ffccb5d3aca91c5d226e99c58258cc12f98c))
+
 ## [1.0.35](https://github.com/joshskkim/realtime-recommendation-engine/compare/v1.0.34...v1.0.35) (2025-09-03)
 
 
