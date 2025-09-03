@@ -1,21 +1,39 @@
-FROM python:3.11-slim-bookworm AS build
+# -------------------------
+# Builder stage
+# -------------------------
+FROM python:3.11-slim-bookworm AS builder
 
 WORKDIR /app
 
-COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+# Upgrade pip/setuptools/wheel first
+RUN pip install --upgrade pip setuptools wheel
 
+# Copy requirements and install dependencies
+COPY requirements.txt .
+RUN pip install --prefix=/install --no-cache-dir -r requirements.txt
+
+# Copy application code
 COPY . .
 
-FROM python:3.11-slim-bookworm
+# -------------------------
+# Runtime stage (Distroless)
+# -------------------------
+FROM gcr.io/distroless/python3:nonroot
 
+# Set working directory
 WORKDIR /app
 
-COPY --from=build /app /app
+# Copy installed Python packages from builder
+COPY --from=builder /install /usr/local
 
-RUN apt-get update && apt-get upgrade -y
+# Copy application
+COPY --from=builder /app /app
 
-RUN useradd -m -u 1001 appuser && chown -R appuser:appuser /app
-USER appuser
+# Set non-root user (distroless already runs as non-root)
+USER nonroot
 
-CMD ["python", "-u", "stream_processor.py"]
+# Expose port if needed (for uvicorn or HTTP server)
+EXPOSE 8000
+
+# Run your application
+CMD ["stream_processor.py"]
