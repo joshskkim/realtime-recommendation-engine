@@ -1,3 +1,10 @@
+## [1.0.34](https://github.com/joshskkim/realtime-recommendation-engine/compare/v1.0.33...v1.0.34) (2025-09-03)
+
+
+### Bug Fixes
+
+* ignore vuln due to false positive ([d50d9a4](https://github.com/joshskkim/realtime-recommendation-engine/commit/d50d9a4d51eceea5769ba2465f32c6bd92bfdcb5))
+
 ## [1.0.33](https://github.com/joshskkim/realtime-recommendation-engine/compare/v1.0.32...v1.0.33) (2025-09-03)
 
 
