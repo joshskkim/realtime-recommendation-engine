@@ -22,8 +22,6 @@
     <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore" Version="8.0.2" />
     <PackageReference Include="AspNetCore.HealthChecks.NpgSql" Version="8.0.0" />
     <PackageReference Include="AspNetCore.HealthChecks.Redis" Version="8.0.0" />
-    <PackageReference Include="Steeltoe.Management.EndpointCore" Version="3.2.6" />
-    <PackageReference Include="Steeltoe.Management.TracingCore" Version="3.2.6" />
   </ItemGroup>
 
 </Project>

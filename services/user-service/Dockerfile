@@ -11,9 +11,6 @@ RUN dotnet restore
 # Copy everything else
 COPY . .
 
-# Remove or comment out Steeltoe references if not needed
-RUN sed -i '/using Steeltoe/d' Program.cs || true
-
 # Build
 RUN dotnet build -c Release -o /app/build
 
