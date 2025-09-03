@@ -123,9 +123,9 @@ jobs:
               ml-service) python -m pytest tests/ 2>/dev/null || echo "No tests found" ;; \
               api-gateway) npm test 2>/dev/null || echo "No tests found" ;; \
               cache-service) cargo test 2>/dev/null || echo "No tests found" ;; \
-              esac
+            esac
           MAKEFILE_EOF
-            fi
+          fi
 
       - name: Run tests for ${{ matrix.service }}
         run: |
@@ -293,34 +293,34 @@ jobs:
           pip install python-multipart>=0.0.18
           
           cat > requirements-fixed.txt <<EOF
-          # FastAPI and web framework
-          fastapi==0.110.0
-          uvicorn[standard]==0.27.1
-          python-multipart==0.0.18
-          # Redis
-          redis==5.0.2
-          hiredis==2.3.2
-          # Kafka
-          kafka-python==2.0.3
-          confluent-kafka==2.5.0
-          # PostgreSQL
-          psycopg2-binary==2.9.9
-          sqlalchemy==2.0.29
-          # Data processing and ML
-          numpy==1.26.4
-          pandas==2.2.1
-          scikit-learn==1.5.2
-          scipy==1.12.0
-          # Utilities
-          pydantic==2.6.3
-          python-dotenv==1.0.1
-          httpx==0.27.0
-          # Monitoring
-          prometheus-client==0.20.0
-          # Testing
-          pytest==8.1.1
-          pytest-asyncio==0.23.5
-          pytest-cov==4.1.0
+            # FastAPI and web framework
+            fastapi==0.110.0
+            uvicorn[standard]==0.27.1
+            python-multipart==0.0.18
+            # Redis
+            redis==5.0.2
+            hiredis==2.3.2
+            # Kafka
+            kafka-python==2.0.3
+            confluent-kafka==2.5.0
+            # PostgreSQL
+            psycopg2-binary==2.9.9
+            sqlalchemy==2.0.29
+            # Data processing and ML
+            numpy==1.26.4
+            pandas==2.2.1
+            scikit-learn==1.5.2
+            scipy==1.12.0
+            # Utilities
+            pydantic==2.6.3
+            python-dotenv==1.0.1
+            httpx==0.27.0
+            # Monitoring
+            prometheus-client==0.20.0
+            # Testing
+            pytest==8.1.1
+            pytest-asyncio==0.23.5
+            pytest-cov==4.1.0
           EOF
           
           safety scan --policy-file /dev/null || echo "Some vulnerabilities remain"

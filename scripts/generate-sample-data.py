@@ -99,7 +99,7 @@ def main():
     
     args = parser.parse_args()
     
-    print(f"🚀 Generating sample data...")
+    print("🚀 Generating sample data...")
     print(f"Users: {args.users}, Items: {args.items}, Interactions: {args.interactions}")
     
     # Set random seed for reproducible data
@@ -115,7 +115,7 @@ def main():
     save_json(items, "items.json", args.output)
     save_json(interactions, "interactions.json", args.output)
     
-    print(f"✅ Sample data generation complete!")
+    print("✅ Sample data generation complete!")
     print(f"📁 Files saved to: {args.output}")
 
 if __name__ == "__main__":
