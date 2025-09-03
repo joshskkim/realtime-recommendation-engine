@@ -62,9 +62,6 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserService, UserService.Services.UserService>();
 builder.Services.AddScoped<IBusinessRulesEngine, BusinessRulesEngine>();
 
-// Prometheus metrics (prometheus-net)
-builder.Services.AddHttpMetrics();
-
 // CORS
 builder.Services.AddCors(options =>
 {
