@@ -1,3 +1,10 @@
+## [1.0.14](https://github.com/joshskkim/realtime-recommendation-engine/compare/v1.0.13...v1.0.14) (2025-09-03)
+
+
+### Bug Fixes
+
+* trivy vulnerabilities ([db8d85e](https://github.com/joshskkim/realtime-recommendation-engine/commit/db8d85e1ff8bae8c0e40b68edf86a06be3ec0d7e))
+
 ## [1.0.13](https://github.com/joshskkim/realtime-recommendation-engine/compare/v1.0.12...v1.0.13) (2025-09-03)
 
 
