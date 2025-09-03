@@ -58,6 +58,23 @@ jobs:
             fi
           done
       
+      - name: Apply base secrets
+        run: |
+          # Export GitHub secrets into environment variables
+          export POSTGRES_PASSWORD="${{ secrets.POSTGRES_PASSWORD }}"
+          export REDIS_PASSWORD="${{ secrets.REDIS_PASSWORD }}"
+          export JWT_SECRET="${{ secrets.JWT_SECRET }}"
+          export GF_SECURITY_ADMIN_PASSWORD="${{ secrets.GF_SECURITY_ADMIN_PASSWORD }}"
+          export KAFKA_PASSWORD="${{ secrets.KAFKA_PASSWORD }}"
+          export DD_API_KEY="${{ secrets.DD_API_KEY }}"
+
+          # Only apply if at least one variable is set
+          if [ -n "$POSTGRES_PASSWORD" ] || [ -n "$REDIS_PASSWORD" ] || [ -n "$JWT_SECRET" ] || [ -n "$GF_SECURITY_ADMIN_PASSWORD" ] || [ -n "$KAFKA_PASSWORD" ] || [ -n "$DD_API_KEY" ]; then
+            envsubst < k8s/base/secrets.yaml | kubectl apply -f -
+          else
+            echo "No secrets set, skipping Secret creation"
+          fi
+        
       - name: Deploy base services
         run: |
           if [ -d "k8s/base" ]; then
