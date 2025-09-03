@@ -16,7 +16,6 @@ permissions:
 env:
   REGISTRY: ghcr.io
   IMAGE_PREFIX: ${{ github.repository }}
-  SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
 
 jobs:
   # Security Scanning
