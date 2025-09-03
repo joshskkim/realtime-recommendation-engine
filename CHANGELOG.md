@@ -1,3 +1,10 @@
+## [1.0.37](https://github.com/joshskkim/realtime-recommendation-engine/compare/v1.0.36...v1.0.37) (2025-09-03)
+
+
+### Bug Fixes
+
+* libffi ([690ddb5](https://github.com/joshskkim/realtime-recommendation-engine/commit/690ddb5cafd89c110d786ea6a2d978587d009876))
+
 ## [1.0.36](https://github.com/joshskkim/realtime-recommendation-engine/compare/v1.0.35...v1.0.36) (2025-09-03)
 
 
