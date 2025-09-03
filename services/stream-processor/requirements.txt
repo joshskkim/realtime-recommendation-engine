@@ -27,3 +27,4 @@ prometheus-client==0.21.1
 # Testing
 pytest==8.3.4
 pytest-asyncio==0.25.0
+zipp>=3.19.1 # not directly required, pinned by Snyk to avoid a vulnerability
