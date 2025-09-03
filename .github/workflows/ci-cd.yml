@@ -17,6 +17,9 @@ permissions:
 env:
   REGISTRY: ghcr.io
   IMAGE_PREFIX: ${{ github.repository }}
+  SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+  SONAR_PROJECT_KEY: joshskkim_realtime-recommendation-engine
+  SONAR_ORGANIZATION: joshskkim
 
 jobs:
   # Security Scanning
@@ -169,6 +172,7 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: ./services/${{ matrix.service }}
+          tags: ${{ matrix.service }}:test
           load: true
           cache-from: type=gha
           cache-to: type=gha,mode=max
