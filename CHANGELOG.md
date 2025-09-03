@@ -1,3 +1,10 @@
+## [1.0.54](https://github.com/joshskkim/realtime-recommendation-engine/compare/v1.0.53...v1.0.54) (2025-09-03)
+
+
+### Bug Fixes
+
+* datadog ([5646518](https://github.com/joshskkim/realtime-recommendation-engine/commit/5646518e36257525b54ceca56141d8351d0b589c))
+
 ## [1.0.53](https://github.com/joshskkim/realtime-recommendation-engine/compare/v1.0.52...v1.0.53) (2025-09-03)
 
 
