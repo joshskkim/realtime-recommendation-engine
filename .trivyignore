@@ -1,0 +1,6 @@
+# Ignore false positives and accepted vulnerabilities
+
+# zlib1g CVE - affects minizip functionality not used by .NET runtime
+CVE-2023-45853
+
+# Add other CVEs to ignore as needed below

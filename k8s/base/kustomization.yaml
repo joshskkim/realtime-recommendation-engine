@@ -1,0 +1,41 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: default
+
+resources:
+  # Use existing deployment files
+  - ../deployments/ml-service.yaml
+  - ../deployments/api-gateway.yaml
+  - ../deployments/cache-service.yaml
+  - ../deployments/stream-processor.yaml
+  - ../deployments/user-service.yaml
+  - ../deployments/redis.yaml
+  - ../deployments/postgresql.yaml
+  - ../deployments/kafka.yaml
+
+commonLabels:
+  app.kubernetes.io/part-of: recommendation-engine
+  environment: test
+
+# Override images for testing
+images:
+  - name: ml-service
+    newTag: test
+  - name: api-gateway
+    newTag: test
+  - name: cache-service
+    newTag: test
+  - name: stream-processor
+    newTag: test
+  - name: user-service
+    newTag: test
+
+# Reduce replicas for testing
+replicas:
+  - name: ml-service
+    count: 1
+  - name: api-gateway
+    count: 1
+  - name: cache-service
+    count: 1
