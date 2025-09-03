@@ -1,3 +1,11 @@
+## [1.0.16](https://github.com/joshskkim/realtime-recommendation-engine/compare/v1.0.15...v1.0.16) (2025-09-03)
+
+
+### Bug Fixes
+
+* merge ([97031ab](https://github.com/joshskkim/realtime-recommendation-engine/commit/97031abba36b657bf351b603c87c42542dafcca5))
+* trivy ([d3cf2c9](https://github.com/joshskkim/realtime-recommendation-engine/commit/d3cf2c99ac563208907b55d6050bbe1c1b80a705))
+
 ## [1.0.15](https://github.com/joshskkim/realtime-recommendation-engine/compare/v1.0.14...v1.0.15) (2025-09-03)
 
 
