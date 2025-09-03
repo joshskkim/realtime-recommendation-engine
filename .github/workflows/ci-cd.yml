@@ -1,15 +1,22 @@
-# File: .github/workflows/ci-cd-complete.yml
 name: Complete CI/CD Pipeline
 
 on:
   push:
-    branches: [main, develop]
+    branches:
+      - main
+      - develop
   pull_request:
-    branches: [main]
+    branches:
+      - main
+
+permissions:
+  contents: read
+  security-events: write
 
 env:
   REGISTRY: ghcr.io
   IMAGE_PREFIX: ${{ github.repository }}
+  SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
 
 jobs:
   # Security Scanning
@@ -18,41 +25,38 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      
+
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@master
         with:
-          scan-type: 'fs'
-          scan-ref: '.'
-          format: 'sarif'
-          output: 'trivy-results.sarif'
-      
+          scan-type: fs
+          scan-ref: .
+          format: sarif
+          output: trivy-results.sarif
+
       - name: Upload Trivy results to GitHub Security
         uses: github/codeql-action/upload-sarif@v2
         if: always()
         with:
-          sarif_file: 'trivy-results.sarif'
-      
-      # Skip Snyk if no token provided
+          sarif_file: trivy-results.sarif
+
       - name: Check for Snyk token
         id: check_snyk
         run: |
           if [ -n "${{ secrets.SNYK_TOKEN }}" ]; then
-            echo "has_token=true" >> $GITHUB_OUTPUT
+            echo "has_token=true" >> "$GITHUB_OUTPUT"
           else
-            echo "has_token=false" >> $GITHUB_OUTPUT
+            echo "has_token=false" >> "$GITHUB_OUTPUT"
             echo "⚠️ Snyk token not configured, skipping Snyk scan"
-          fi
-      
+
       - name: Run Snyk Security Scan
         if: steps.check_snyk.outputs.has_token == 'true'
         uses: snyk/actions/python@master
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         with:
-          args: --severity-threshold=high
+          args: --severity-threshold=high --file=services/ml-service/requirements.txt
           command: test
-          workingDirectory: services/ml-service
 
   # Static Code Analysis
   code-quality:
@@ -60,30 +64,26 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      
-      # Skip SonarCloud if no token
+
       - name: Check for Sonar token
         id: check_sonar
         run: |
           if [ -n "${{ secrets.SONAR_TOKEN }}" ]; then
-            echo "has_token=true" >> $GITHUB_OUTPUT
+            echo "has_token=true" >> "$GITHUB_OUTPUT"
           else
-            echo "has_token=false" >> $GITHUB_OUTPUT
+            echo "has_token=false" >> "$GITHUB_OUTPUT"
             echo "⚠️ Sonar token not configured, skipping SonarCloud scan"
-          fi
-      
+
       - name: SonarQube Scan
         if: steps.check_sonar.outputs.has_token == 'true'
         uses: SonarSource/sonarqube-scan-action@v3.0.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-      
+
       - name: Run CodeQL Analysis
         uses: github/codeql-action/analyze@v2
         continue-on-error: true
-        with:
-          languages: python, javascript
 
   # Test all services
   test-services:
@@ -91,10 +91,13 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        service: [ml-service, api-gateway, cache-service]
+        service:
+          - ml-service
+          - api-gateway
+          - cache-service
     steps:
       - uses: actions/checkout@v4
-      
+
       - name: Set up test environment for ${{ matrix.service }}
         run: |
           case "${{ matrix.service }}" in
@@ -108,25 +111,23 @@ jobs:
               echo "Setting up Rust"
               ;;
           esac
-      
+
       - name: Create test Makefile if missing
         run: |
           if [ ! -f "services/${{ matrix.service }}/Makefile" ]; then
-            cat > services/${{ matrix.service }}/Makefile << 'EOF'
-.PHONY: test
-test:
-	@echo "Running tests for ${{ matrix.service }}..."
-	@case "${{ matrix.service }}" in \
-	  ml-service) \
-	    python -m pytest tests/ 2>/dev/null || echo "No tests found" ;; \
-	  api-gateway) \
-	    npm test 2>/dev/null || echo "No tests found" ;; \
-	  cache-service) \
-	    cargo test 2>/dev/null || echo "No tests found" ;; \
-	esac
-EOF
-          fi
-      
+            mkdir -p services/${{ matrix.service }}
+            cat > "services/${{ matrix.service }}/Makefile" <<'MAKEFILE_EOF'
+          .PHONY: test
+          test:
+            echo "Running tests for $${{ matrix.service }}..."
+            case "$${{ matrix.service }}" in \
+              ml-service) python -m pytest tests/ 2>/dev/null || echo "No tests found" ;; \
+              api-gateway) npm test 2>/dev/null || echo "No tests found" ;; \
+              cache-service) cargo test 2>/dev/null || echo "No tests found" ;; \
+              esac
+          MAKEFILE_EOF
+            fi
+
       - name: Run tests for ${{ matrix.service }}
         run: |
           cd services/${{ matrix.service }}
@@ -135,7 +136,7 @@ EOF
           else
             echo "No Makefile found, skipping tests"
           fi
-      
+
       - name: Upload coverage
         if: success()
         uses: codecov/codecov-action@v3
@@ -146,17 +147,23 @@ EOF
   # Build and scan containers
   build-and-scan:
     name: Build & Scan ${{ matrix.service }}
-    needs: [security-scan, test-services]
+    needs:
+      - security-scan
+      - test-services
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        service: [ml-service, api-gateway, cache-service, stream-processor]
+        service:
+          - ml-service
+          - api-gateway
+          - cache-service
+          - stream-processor
     steps:
       - uses: actions/checkout@v4
-      
+
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
-      
+
       - name: Build image
         uses: docker/build-push-action@v5
         with:
@@ -165,15 +172,15 @@ EOF
           load: true
           cache-from: type=gha
           cache-to: type=gha,mode=max
-      
+
       - name: Scan image with Trivy
         uses: aquasecurity/trivy-action@master
         with:
           image-ref: ${{ matrix.service }}:test
-          format: 'table'
-          exit-code: '0'  # Don't fail on vulnerabilities, just report
-          severity: 'CRITICAL,HIGH'
-      
+          format: table
+          exit-code: '0'
+          severity: CRITICAL,HIGH
+
       - name: Run Grype vulnerability scan
         uses: anchore/scan-action@v3
         continue-on-error: true
@@ -189,7 +196,7 @@ EOF
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      
+
       - name: Create Kind cluster
         uses: helm/kind-action@v1.8.0
         with:
@@ -198,9 +205,9 @@ EOF
             kind: Cluster
             apiVersion: kind.x-k8s.io/v1alpha4
             nodes:
-            - role: control-plane
-            - role: worker
-      
+              - role: control-plane
+              - role: worker
+
       - name: Load images to Kind
         run: |
           for service in ml-service api-gateway cache-service stream-processor; do
@@ -209,27 +216,20 @@ EOF
               kind load docker-image $service:test --name test-cluster || echo "Load failed for $service"
             fi
           done
-      
+
       - name: Install dependencies
         run: |
-          # Install Redis
           helm repo add bitnami https://charts.bitnami.com/bitnami
           helm install redis bitnami/redis --set auth.enabled=false || echo "Redis install failed"
-          
-          # Install PostgreSQL
           helm install postgres bitnami/postgresql || echo "PostgreSQL install failed"
-      
+
       - name: Deploy to Kind
         run: |
           kubectl create namespace recommendation-system || true
-          
-          # Apply configs if they exist
           if [ -d "k8s/base" ]; then
             kubectl apply -f k8s/base/ || echo "Base config failed"
           fi
-          
           if [ -d "k8s/deployments" ]; then
-            # Update image references
             for file in k8s/deployments/*.yaml; do
               if [ -f "$file" ]; then
                 sed -i 's|ghcr.io/.*:.*|test:test|g' "$file"
@@ -237,18 +237,15 @@ EOF
             done
             kubectl apply -f k8s/deployments/ || echo "Deployments failed"
           fi
-      
+
       - name: Wait for deployments
         run: |
           kubectl -n recommendation-system wait --for=condition=available --timeout=300s deployment/ml-service || echo "ML service not ready"
-      
+
       - name: Run smoke tests
         run: |
-          # Port forward
           kubectl -n recommendation-system port-forward svc/ml-service 8000:8000 &
           sleep 5
-          
-          # Test endpoints
           curl -f http://localhost:8000/health || echo "Health check failed"
 
   # Performance testing
@@ -259,15 +256,16 @@ EOF
     continue-on-error: true
     steps:
       - uses: actions/checkout@v4
-      
+
       - name: Install k6
         run: |
-          sudo gpg -k
-          sudo gpg --no-default-keyring --keyring /usr/share/keyrings/k6-archive-keyring.gpg --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys C5AD17C747E3415A3642D57D77C6C491D6AC1D69
+          sudo apt-get update
+          sudo apt-get install -y gnupg software-properties-common
+          curl -s https://dl.k6.io/key.gpg | sudo gpg --dearmor -o /usr/share/keyrings/k6-archive-keyring.gpg
           echo "deb [signed-by=/usr/share/keyrings/k6-archive-keyring.gpg] https://dl.k6.io/deb stable main" | sudo tee /etc/apt/sources.list.d/k6.list
           sudo apt-get update
-          sudo apt-get install k6
-      
+          sudo apt-get install -y k6
+
       - name: Run load tests
         run: |
           if [ -f "tests/performance/load-test.js" ]; then
@@ -282,76 +280,64 @@ EOF
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      
+
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.11'
-      
+
       - name: Check Python dependencies
         run: |
           pip install safety
           cd services/ml-service
-          
-          # Update vulnerable packages first
           pip install kafka-python>=2.0.3
           pip install python-multipart>=0.0.18
           
-          # Create updated requirements
-          cat > requirements-fixed.txt << 'EOF'
-# FastAPI and web framework
-fastapi==0.110.0
-uvicorn[standard]==0.27.1
-python-multipart==0.0.18  # Fixed from 0.0.9
-
-# Redis
-redis==5.0.2
-hiredis==2.3.2
-
-# Kafka
-kafka-python==2.0.3  # Fixed from 2.0.2
-confluent-kafka==2.5.0
-
-# PostgreSQL
-psycopg2-binary==2.9.9
-sqlalchemy==2.0.29
-
-# Data processing and ML
-numpy==1.26.4
-pandas==2.2.1
-scikit-learn==1.5.2
-scipy==1.12.0
-
-# Utilities
-pydantic==2.6.3
-python-dotenv==1.0.1
-httpx==0.27.0
-
-# Monitoring
-prometheus-client==0.20.0
-
-# Testing
-pytest==8.1.1
-pytest-asyncio==0.23.5
-pytest-cov==4.1.0
-EOF
+          cat > requirements-fixed.txt <<EOF
+          # FastAPI and web framework
+          fastapi==0.110.0
+          uvicorn[standard]==0.27.1
+          python-multipart==0.0.18
+          # Redis
+          redis==5.0.2
+          hiredis==2.3.2
+          # Kafka
+          kafka-python==2.0.3
+          confluent-kafka==2.5.0
+          # PostgreSQL
+          psycopg2-binary==2.9.9
+          sqlalchemy==2.0.29
+          # Data processing and ML
+          numpy==1.26.4
+          pandas==2.2.1
+          scikit-learn==1.5.2
+          scipy==1.12.0
+          # Utilities
+          pydantic==2.6.3
+          python-dotenv==1.0.1
+          httpx==0.27.0
+          # Monitoring
+          prometheus-client==0.20.0
+          # Testing
+          pytest==8.1.1
+          pytest-asyncio==0.23.5
+          pytest-cov==4.1.0
+          EOF
           
-          # Use safety scan instead of deprecated check
           safety scan --policy-file /dev/null || echo "Some vulnerabilities remain"
-      
+
       - name: Check Node dependencies
         run: |
           if [ -d "services/api-gateway" ]; then
             cd services/api-gateway
             npm audit fix --force || echo "Some npm vulnerabilities remain"
           fi
-      
-      - name: Check Rust dependencies  
+
+      - name: Check Rust dependencies
         run: |
           if [ -d "services/cache-service" ]; then
             cd services/cache-service
             cargo audit || echo "Cargo audit not available"
-          fi
 
   # Documentation validation
   docs-check:
@@ -359,46 +345,42 @@ EOF
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      
+
       - name: Fix README markdown issues
         run: |
-          # Create fixed README
           cp README.md README.md.bak
-          
-          # Fix inline HTML by converting to markdown
           sed -i 's|<div align="center">||g' README.md
           sed -i 's|</div>||g' README.md
           sed -i 's|<strong>|**|g' README.md
           sed -i 's|</strong>|**|g' README.md
           sed -i 's|<img.*alt="\([^"]*\)".*/>|![\1](docs/images/placeholder.png)|g' README.md
-          
-          # Fix bare URLs
           sed -i 's|josh.sk.kim@gmail.com|<josh.sk.kim@gmail.com>|g' README.md
-          
-          # Ensure single trailing newline
           echo "" >> README.md
           truncate -s -1 README.md
-      
+
       - name: Check markdown
         uses: DavidAnson/markdownlint-cli2-action@v13
         continue-on-error: true
         with:
           globs: '**/*.md'
           config: |
-            {
-              "MD013": false,
-              "MD033": false,
-              "MD022": { "lines_above": 1, "lines_below": 0 },
-              "MD031": false,
-              "MD032": false,
-              "MD034": false,
-              "MD036": false,
-              "MD047": false
-            }
-      
+            MD013: false
+            MD033: false
+            MD022:
+              lines_above: 1
+              lines_below: 0
+            MD031: false
+            MD032: false
+            MD034: false
+            MD036: false
+            MD047: false
+
       - name: Check API documentation
         run: |
-          # Validate OpenAPI specs if they exist
           if [ -f "docs/api-spec.yaml" ]; then
             npx @apidevtools/swagger-cli validate docs/api-spec.yaml || echo "API spec validation failed"
-          fi
+
+      - name: Semantic Release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: npx semantic-release
