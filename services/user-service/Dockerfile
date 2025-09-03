@@ -16,7 +16,7 @@ FROM build AS publish
 RUN dotnet publish -c Release -o /app/publish
 
 # Runtime
-FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS final
+FROM mcr.microsoft.com/dotnet/aspnet:8.0.20230927-bookworm-slim AS final
 WORKDIR /app
 
 # Optional minimal runtime dependencies
