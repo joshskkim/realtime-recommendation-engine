@@ -3,12 +3,12 @@ FROM python:3.13.7-alpine3.22 AS builder
 WORKDIR /app
 
 # Install build dependencies
-RUN apt-get update && apt-get install -y --no-install-recommends \
+RUN apk update && apk add --no-cache \
     g++ \
     gcc \
     libpq5 \
     libssl-dev \
-    && rm -rf /var/lib/apt/lists/*
+    && rm -rf /var/cache/apk/*
 
 # Copy requirements and install
 COPY requirements.txt .
@@ -24,7 +24,7 @@ FROM python:3.13.7-alpine3.22
 WORKDIR /app
 
 # Upgrade system packages
-RUN apt-get update && apt-get upgrade -y --no-install-recommends && rm -rf /var/lib/apt/lists/*
+RUN apk update && apk upgrade -y --no-cache
 
 # Copy installed Python packages
 COPY --from=builder /usr/local/lib/python3.13/site-packages /usr/local/lib/python3.13/site-packages
