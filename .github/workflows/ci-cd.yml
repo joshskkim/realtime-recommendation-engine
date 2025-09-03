@@ -141,6 +141,7 @@ jobs:
           - api-gateway
           - cache-service
           - stream-processor
+          - user-service
     steps:
       - uses: actions/checkout@v4
 
