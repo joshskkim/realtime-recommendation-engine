@@ -1,3 +1,10 @@
+## [1.0.20](https://github.com/joshskkim/realtime-recommendation-engine/compare/v1.0.19...v1.0.20) (2025-09-03)
+
+
+### Bug Fixes
+
+* trivy continue ([ab46cde](https://github.com/joshskkim/realtime-recommendation-engine/commit/ab46cdedd44e7454d804153250afc1a9f332fb70))
+
 ## [1.0.19](https://github.com/joshskkim/realtime-recommendation-engine/compare/v1.0.18...v1.0.19) (2025-09-03)
 
 
