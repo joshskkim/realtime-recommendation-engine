@@ -1,5 +1,29 @@
-confluent-kafka==2.5.0
-redis==5.0.8
-numpy==1.26.4
-scipy==1.14.0
-dataclasses-json==0.6.7
+# Kafka and streaming
+kafka-python==2.0.3
+confluent-kafka==2.6.1
+
+# Redis
+redis==5.2.1
+hiredis==3.0.0
+
+# PostgreSQL
+psycopg2-binary==2.9.10
+sqlalchemy==2.0.36
+
+# Data processing
+numpy==2.2.0
+pandas==2.2.3
+
+# Utilities
+python-dotenv==1.0.1
+pydantic==2.10.3
+
+# Logging
+structlog==24.4.0
+
+# Monitoring
+prometheus-client==0.21.1
+
+# Testing
+pytest==8.3.4
+pytest-asyncio==0.25.0

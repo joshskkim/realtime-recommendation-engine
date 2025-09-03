@@ -1,27 +1,53 @@
-FROM python:3.13.7-slim AS builder
+# Multi-stage build for Stream Processor
+FROM python:3.12-slim AS builder
 
 WORKDIR /app
 
-# Install build dependencies for compiling packages like numpy
+# Install build dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
-    cmake \
-    gfortran \
-    libffi-dev \
-    libopenblas-dev \
+    gcc \
     libpq-dev \
-    pkg-config \
-    && pip install --upgrade pip \
-    && pip install scipy \
+    && rm -rf /var/lib/apt/lists/*
+
+# Upgrade pip and install wheel
+RUN pip install --no-cache-dir --upgrade pip setuptools wheel
+
+# Copy and install requirements
+COPY requirements.txt .
+RUN pip wheel --no-cache-dir --wheel-dir /app/wheels -r requirements.txt
+
+# Runtime stage
+FROM python:3.12-slim
+
+WORKDIR /app
+
+# Install runtime dependencies only
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+    libpq5 \
+    curl \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-# Upgrade pip/setuptools/wheel
-RUN pip install --upgrade pip setuptools wheel
-
-# Copy requirements and install dependencies
+# Copy wheels from builder and install
+COPY --from=builder /app/wheels /wheels
 COPY requirements.txt .
-RUN pip install --prefix=/install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir --upgrade pip && \
+    pip install --no-cache-dir --no-index --find-links=/wheels -r requirements.txt && \
+    rm -rf /wheels
+
+# Create non-root user
+RUN useradd -m -u 1001 -s /bin/bash appuser && \
+    chown -R appuser:appuser /app
 
 # Copy application code
-COPY . .
+COPY --chown=appuser:appuser . .
+
+USER appuser
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
+    CMD python -c "import sys; sys.exit(0)" || exit 1
+
+CMD ["python", "stream_processor.py"]
