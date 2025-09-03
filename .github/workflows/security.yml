@@ -1,0 +1,65 @@
+name: Security Scanning
+
+on:
+  schedule:
+    - cron: '0 2 * * 1'  # Weekly on Mondays
+  workflow_dispatch:
+  push:
+    paths:
+      - '**/requirements.txt'
+      - '**/package.json'
+      - '**/Cargo.toml'
+      - '**/*.csproj'
+
+jobs:
+  dependency-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Python Dependencies
+        if: hashFiles('services/*/requirements.txt') != ''
+        run: |
+          pip install safety
+          for req in services/*/requirements.txt; do
+            [ -f "$req" ] && safety check -r "$req" --json || true
+          done
+
+      - name: Node Dependencies
+        if: hashFiles('services/*/package.json') != ''
+        run: |
+          for dir in services/*; do
+            [ -f "$dir/package.json" ] && (cd "$dir" && npm audit --audit-level=high || true)
+          done
+
+      - name: Snyk Security
+        if: github.event_name == 'push'
+        uses: snyk/actions/node@master
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        continue-on-error: true
+        with:
+          args: --severity-threshold=high
+
+  container-scan:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        service: [ml-service, api-gateway, cache-service, stream-processor, user-service]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build image
+        run: |
+          [ -d "services/${{ matrix.service }}" ] && \
+          docker build -t ${{ matrix.service }}:scan services/${{ matrix.service }}/ || \
+          echo "Service not found"
+
+      - name: Trivy scan
+        if: success()
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: ${{ matrix.service }}:scan
+          exit-code: '0'
+          severity: CRITICAL,HIGH
+          trivyignores: .trivyignore

@@ -1,0 +1,42 @@
+name: Documentation
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '**/*.md'
+      - 'docs/**'
+      - '.github/workflows/docs.yml'
+  pull_request:
+    paths:
+      - '**/*.md'
+      - 'docs/**'
+
+jobs:
+  validate-docs:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Markdown lint
+        uses: DavidAnson/markdownlint-cli2-action@v13
+        continue-on-error: true
+        with:
+          globs: '**/*.md'
+          config: |
+            {
+              "MD013": false,
+              "MD033": false,
+              "MD034": false
+            }
+
+      - name: Check links
+        uses: gaurav-nelson/github-action-markdown-link-check@v1
+        continue-on-error: true
+        with:
+          config-file: '.markdown-link-check.json'
+
+      - name: API spec validation
+        if: hashFiles('docs/api-spec.yaml') != ''
+        run: |
+          npx @apidevtools/swagger-cli validate docs/api-spec.yaml || true

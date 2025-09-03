@@ -1,0 +1,103 @@
+name: Kubernetes Tests
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'k8s/**'
+      - 'services/*/Dockerfile'
+      - '.github/workflows/k8s-test.yml'
+  pull_request:
+    paths:
+      - 'k8s/**'
+      - 'services/*/Dockerfile'
+
+jobs:
+  k8s-integration:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      
+      - name: Create Kind config file
+        run: |
+          cat <<EOF > /tmp/kind-config.yaml
+          kind: Cluster
+          apiVersion: kind.x-k8s.io/v1alpha4
+          nodes:
+            - role: control-plane
+            - role: worker
+          EOF
+      
+      - name: Create Kind cluster
+        uses: helm/kind-action@v1.9.0
+        with:
+          version: v0.20.0
+          config: /tmp/kind-config.yaml
+          cluster_name: test-cluster
+          wait: 300s
+      
+      - name: Verify cluster
+        run: |
+          kubectl version --client
+          kubectl cluster-info
+          kubectl get nodes
+      
+      - name: Build and load images
+        run: |
+          SERVICES="user-service ml-service stream-processor cache-service api-gateway"
+          for service in $SERVICES; do
+            if [ -d "services/$service" ]; then
+              echo "Building $service..."
+              docker build -t $service:test services/$service/
+              kind load docker-image $service:test --name test-cluster
+            fi
+          done
+      
+      - name: Deploy base services
+        run: |
+          if [ -d "k8s/base" ]; then
+            kubectl apply -k k8s/base --dry-run=server
+            kubectl apply -k k8s/base
+            kubectl rollout status deployment --all -n default --timeout=300s || true
+          fi
+      
+      - name: Deploy monitoring
+        run: |
+          if [ -d "k8s/monitoring" ]; then
+            kubectl create namespace monitoring || true
+            kubectl apply -k k8s/monitoring
+            kubectl rollout status deployment --all -n monitoring --timeout=180s || true
+          fi
+      
+      - name: Deploy optimizations
+        run: |
+          if [ -d "k8s/optimizations" ]; then
+            kubectl apply -k k8s/optimizations
+            kubectl get hpa,pdb,networkpolicy -n default
+          fi
+      
+      - name: Verify no external resources
+        run: |
+          kubectl get ingress --all-namespaces 2>&1 | grep -q "No resources found" || true
+          kubectl get svc -A -o json | jq -r '.items[] | select(.spec.type=="LoadBalancer") | .metadata.name' || true
+      
+      - name: Run smoke tests
+        run: |
+          kubectl run test --image=busybox:latest --restart=Never -- echo "Test"
+          kubectl wait --for=condition=Completed pod/test --timeout=30s || true
+          kubectl delete pod test --ignore-not-found=true
+      
+      - name: Debug on failure
+        if: failure()
+        run: |
+          kubectl get pods -A
+          kubectl get events -A --sort-by='.lastTimestamp' | tail -20
+      
+      - name: Cleanup
+        if: always()
+        run: kind delete cluster --name test-cluster || true

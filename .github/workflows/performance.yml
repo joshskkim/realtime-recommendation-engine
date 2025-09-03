@@ -1,0 +1,32 @@
+name: Performance Tests
+
+on:
+  schedule:
+    - cron: '0 4 * * *'  # Daily at 4 AM
+  workflow_dispatch:
+  push:
+    paths:
+      - 'tests/performance/**'
+      - 'services/*/performance/**'
+
+jobs:
+  load-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup k6
+        uses: grafana/setup-k6-action@v1
+
+      - name: Run load tests
+        run: |
+          for script in tests/performance/*.js; do
+            [ -f "$script" ] && k6 run "$script" --vus 10 --duration 30s || true
+          done
+
+      - name: Upload results
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: k6-results
+          path: results/
