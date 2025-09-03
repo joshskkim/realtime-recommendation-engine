@@ -1,3 +1,10 @@
+## [1.0.25](https://github.com/joshskkim/realtime-recommendation-engine/compare/v1.0.24...v1.0.25) (2025-09-03)
+
+
+### Bug Fixes
+
+* 3.13 python ([2a5c603](https://github.com/joshskkim/realtime-recommendation-engine/commit/2a5c603604cc28e553a444bd7286da17e730bfeb))
+
 ## [1.0.24](https://github.com/joshskkim/realtime-recommendation-engine/compare/v1.0.23...v1.0.24) (2025-09-03)
 
 
