@@ -95,8 +95,7 @@ app.UseCors();
 app.UseRouting();
 
 // Prometheus endpoints
-app.UseMetricServer();   // /metrics
-app.UseHttpMetrics();    // automatic HTTP metrics
+app.UseMetricServer();   //metrics
 
 app.MapControllers();
 app.MapHealthChecks("/health");
