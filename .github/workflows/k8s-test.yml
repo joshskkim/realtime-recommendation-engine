@@ -57,11 +57,17 @@ jobs:
               kind load docker-image $service:test --name test-cluster
             fi
           done
+    
+      - name: Ensure namespaces
+        run: kubectl create namespace recommendation-system || true
 
       - name: Apply base secrets
         run: |
             # With dummy/test values, placeholders already default to "dummy"
             kubectl apply -f k8s/base/secrets.yaml
+          
+      - name: Deploy base services
+        run: kubectl apply -k k8s/base
         
       - name: Deploy base services
         run: |
