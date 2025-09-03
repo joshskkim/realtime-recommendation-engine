@@ -1,3 +1,10 @@
+## [1.0.48](https://github.com/joshskkim/realtime-recommendation-engine/compare/v1.0.47...v1.0.48) (2025-09-03)
+
+
+### Bug Fixes
+
+* stub services for k8s ([eb21299](https://github.com/joshskkim/realtime-recommendation-engine/commit/eb212999bfd815afb2641ede7b0bccbe30ebc51a))
+
 ## [1.0.47](https://github.com/joshskkim/realtime-recommendation-engine/compare/v1.0.46...v1.0.47) (2025-09-03)
 
 
