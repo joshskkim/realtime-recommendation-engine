@@ -1,3 +1,10 @@
+## [1.0.43](https://github.com/joshskkim/realtime-recommendation-engine/compare/v1.0.42...v1.0.43) (2025-09-03)
+
+
+### Bug Fixes
+
+* k8s workflow ([ba9b683](https://github.com/joshskkim/realtime-recommendation-engine/commit/ba9b683d223471144915dd83e63a2b50a4e425aa))
+
 ## [1.0.42](https://github.com/joshskkim/realtime-recommendation-engine/compare/v1.0.41...v1.0.42) (2025-09-03)
 
 
