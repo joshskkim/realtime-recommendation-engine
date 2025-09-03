@@ -1,3 +1,10 @@
+## [1.0.51](https://github.com/joshskkim/realtime-recommendation-engine/compare/v1.0.50...v1.0.51) (2025-09-03)
+
+
+### Bug Fixes
+
+* secrets k8s ([7d2fa44](https://github.com/joshskkim/realtime-recommendation-engine/commit/7d2fa444b086e559d41bc69dbe04367f9ba2aa05))
+
 ## [1.0.50](https://github.com/joshskkim/realtime-recommendation-engine/compare/v1.0.49...v1.0.50) (2025-09-03)
 
 
