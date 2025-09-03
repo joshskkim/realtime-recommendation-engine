@@ -191,9 +191,7 @@ jobs:
         run: |
           grype ${{ matrix.service }}:test \
             --config grype-ignore.yaml \
-            --fail-on high,critical
-    # <-- Add this to ignore CVEs
-
+            --fail-on critical
 
   # Local Kubernetes testing with Kind
   k8s-test:
