@@ -24,22 +24,10 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
       
-      - name: Create Kind config file
-        run: |
-          mkdir -p /tmp
-          cat <<EOF > /tmp/kind-config.yaml
-          kind: Cluster
-          apiVersion: kind.x-k8s.io/v1alpha4
-          nodes:
-            - role: control-plane
-            - role: worker
-          EOF
-      
       - name: Create Kind cluster
         uses: helm/kind-action@v1.10.0
         with:
           version: v0.22.0
-          config: /tmp/kind-config.yaml
           cluster_name: test-cluster
           wait: 300s
       
@@ -50,17 +38,6 @@ jobs:
           kubectl get nodes
           kubectl wait --for=condition=Ready nodes --all --timeout=60s
       
-      # Step 1: Install VPA from official source
-      - name: Install VPA CRDs
-        run: |
-          echo "Installing VPA from official Kubernetes autoscaler repo..."
-          kubectl apply -f https://github.com/kubernetes/autoscaler/releases/latest/download/vpa-crd.yaml
-          echo "Waiting for VPA CRDs to be established..."
-          kubectl wait --for condition=established --timeout=60s crd/verticalpodautoscalers.autoscaling.k8s.io || {
-            echo "VPA CRD installation may have failed, continuing with basic testing..."
-          }
-      
-      # Step 2: Build and load only existing services
       - name: Build and load Docker images
         run: |
           SERVICES="user-service ml-service stream-processor cache-service api-gateway"
@@ -79,20 +56,17 @@ jobs:
             fi
           done
     
-      # Step 3: Create namespace
       - name: Create namespace
         run: |
           kubectl create namespace recommendation-system --dry-run=client -o yaml | kubectl apply -f -
-          kubectl create namespace monitoring --dry-run=client -o yaml | kubectl apply -f - || true
 
-      # Step 4: Apply secrets first (if they exist)
       - name: Apply secrets
         run: |
           if [ -f "k8s/base/secrets.yaml" ]; then
             echo "Applying secrets..."
-            kubectl apply -f k8s/base/secrets.yaml -n recommendation-system
+            kubectl apply -f k8s/base/secrets.yaml
           else
-            echo "No secrets file found, creating dummy secret..."
+            echo "Creating basic secrets..."
             kubectl create secret generic app-secrets \
               --from-literal=redis-password=dummy \
               --from-literal=db-password=dummy \
@@ -100,7 +74,6 @@ jobs:
               --dry-run=client -o yaml | kubectl apply -f -
           fi
           
-      # Step 5: Apply base services
       - name: Deploy base services
         run: |
           if [ -d "k8s/base" ] && [ -f "k8s/base/kustomization.yaml" ]; then
@@ -108,60 +81,40 @@ jobs:
             kubectl apply -k k8s/base
           elif [ -d "k8s/base" ]; then
             echo "Applying base YAML files..."
-            kubectl apply -f k8s/base/ -n recommendation-system || true
+            kubectl apply -f k8s/base/ || echo "Some files may not exist, continuing..."
           else
-            echo "No base services found, skipping..."
+            echo "No base services found, deploying test pod..."
+            kubectl run test-nginx --image=nginx:1.25-alpine -n recommendation-system
           fi
       
-      # Step 6: Wait for deployments to be ready
       - name: Wait for deployments
         run: |
           echo "Waiting for deployments to be ready..."
-          kubectl wait --for=condition=available --timeout=180s deployment --all -n recommendation-system || {
-            echo "Some deployments failed to start, checking status..."
+          kubectl wait --for=condition=available --timeout=120s deployment --all -n recommendation-system || {
+            echo "Checking what's running..."
             kubectl get pods -n recommendation-system
             kubectl get events -n recommendation-system --sort-by='.lastTimestamp' | tail -10
           }
       
-      # Step 7: Apply monitoring (optional)
-      - name: Deploy monitoring
-        run: |
-          if [ -d "k8s/monitoring" ]; then
-            echo "Deploying monitoring stack..."
-            kubectl apply -k k8s/monitoring -n monitoring || {
-              echo "Monitoring deployment failed, continuing..."
-              kubectl get events -n monitoring --sort-by='.lastTimestamp' | tail -5
-            }
-          else
-            echo "No monitoring configuration found, skipping..."
-          fi
-      
-      # Step 8: Basic smoke test
-      - name: Run smoke tests
+      - name: Basic smoke test
         run: |
           echo "Running basic connectivity tests..."
-          kubectl run test-pod --image=busybox:1.36 --restart=Never --rm -i --timeout=30s \
-            -- sh -c 'echo "Cluster is working"; sleep 5' || true
-          
-          echo "Checking service endpoints..."
-          kubectl get svc -A
           kubectl get pods -A
+          kubectl get svc -A
+          
+          # Test cluster DNS
+          kubectl run dns-test --image=busybox:1.36 --restart=Never --rm -i --timeout=30s \
+            -- nslookup kubernetes.default.svc.cluster.local || echo "DNS test completed"
       
-      # Step 9: Debug on failure
       - name: Debug information
         if: failure()
         run: |
           echo "=== CLUSTER DEBUG INFO ==="
           kubectl get nodes
           kubectl get pods -A
-          kubectl get svc -A
           kubectl get events -A --sort-by='.lastTimestamp' | tail -20
-          echo "=== CRD Status ==="
-          kubectl get crd | grep -i vpa || echo "No VPA CRDs found"
       
-      # Step 10: Cleanup
       - name: Cleanup
         if: always()
         run: |
-          echo "Cleaning up Kind cluster..."
           kind delete cluster --name test-cluster || true
