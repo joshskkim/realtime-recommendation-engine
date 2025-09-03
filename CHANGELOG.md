@@ -1,3 +1,10 @@
+## [1.0.50](https://github.com/joshskkim/realtime-recommendation-engine/compare/v1.0.49...v1.0.50) (2025-09-03)
+
+
+### Bug Fixes
+
+* grafana ([18fa3cc](https://github.com/joshskkim/realtime-recommendation-engine/commit/18fa3cccf5d4a452dc101ee28909d0895f4e582b))
+
 ## [1.0.49](https://github.com/joshskkim/realtime-recommendation-engine/compare/v1.0.48...v1.0.49) (2025-09-03)
 
 
