@@ -1,40 +1,16 @@
 {
-  "repositoryUrl": "https://github.com/joshskkim/realtime-recommendation-engine.git",
   "branches": ["main"],
-  "tagFormat": "v${version}",
   "plugins": [
+    "@semantic-release/commit-analyzer",
+    "@semantic-release/release-notes-generator",
+    "@semantic-release/changelog",
     [
-      "@semantic-release/commit-analyzer",
+      "@semantic-release/git",
       {
-        "preset": "conventionalcommits",
-        "releaseRules": [
-          {"type": "docs", "scope": "README", "release": "patch"},
-          {"type": "refactor", "release": "patch"}
-        ]
+        "assets": ["CHANGELOG.md", "package.json"],
+        "message": "chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
       }
     ],
-    [
-      "@semantic-release/release-notes-generator",
-      {
-        "preset": "conventionalcommits",
-        "writerOpts": {
-          "noteGroupsSort": "title"
-        }
-      }
-    ],
-    [
-      "@semantic-release/changelog",
-      {
-        "changelogFile": "CHANGELOG.md"
-      }
-    ],
-    [
-      "@semantic-release/github",
-      {
-        "assets": [
-          {"path": "target/release/*.tar.gz", "label": "Rust Binary Tarball"}
-        ]
-      }
-    ]
+    "@semantic-release/github"
   ]
 }
