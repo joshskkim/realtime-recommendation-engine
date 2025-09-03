@@ -1,3 +1,10 @@
+## [1.0.19](https://github.com/joshskkim/realtime-recommendation-engine/compare/v1.0.18...v1.0.19) (2025-09-03)
+
+
+### Bug Fixes
+
+* libssl ([4f87cc2](https://github.com/joshskkim/realtime-recommendation-engine/commit/4f87cc208dfb0e208e10a4307238568bf99b9670))
+
 ## [1.0.18](https://github.com/joshskkim/realtime-recommendation-engine/compare/v1.0.17...v1.0.18) (2025-09-03)
 
 
