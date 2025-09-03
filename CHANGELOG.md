@@ -1,3 +1,10 @@
+## [1.0.15](https://github.com/joshskkim/realtime-recommendation-engine/compare/v1.0.14...v1.0.15) (2025-09-03)
+
+
+### Bug Fixes
+
+* csproj versioning ([ae3d0d9](https://github.com/joshskkim/realtime-recommendation-engine/commit/ae3d0d9e99ffcf5b4369004f606e9ba98ced3731))
+
 ## [1.0.14](https://github.com/joshskkim/realtime-recommendation-engine/compare/v1.0.13...v1.0.14) (2025-09-03)
 
 
