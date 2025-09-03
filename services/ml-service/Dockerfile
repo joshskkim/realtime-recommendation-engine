@@ -30,7 +30,7 @@ WORKDIR /app
 
 # Install runtime dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    libffi7 \
+    libffi-dev \
     libpq5 \
     openssl \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
