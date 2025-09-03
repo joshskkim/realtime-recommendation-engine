@@ -1,3 +1,10 @@
+## [1.0.21](https://github.com/joshskkim/realtime-recommendation-engine/compare/v1.0.20...v1.0.21) (2025-09-03)
+
+
+### Bug Fixes
+
+* only fail on critical ([3d2bded](https://github.com/joshskkim/realtime-recommendation-engine/commit/3d2bdedf7094ddc1bec9e55e101dc6780f7598f3))
+
 ## [1.0.20](https://github.com/joshskkim/realtime-recommendation-engine/compare/v1.0.19...v1.0.20) (2025-09-03)
 
 
