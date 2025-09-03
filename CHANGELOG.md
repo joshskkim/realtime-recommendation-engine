@@ -1,3 +1,10 @@
+## [1.0.6](https://github.com/joshskkim/realtime-recommendation-engine/compare/v1.0.5...v1.0.6) (2025-09-03)
+
+
+### Bug Fixes
+
+* dockerfiles ([25e6742](https://github.com/joshskkim/realtime-recommendation-engine/commit/25e67420c2022aef78abee6abd95098897d852de))
+
 ## [1.0.5](https://github.com/joshskkim/realtime-recommendation-engine/compare/v1.0.4...v1.0.5) (2025-09-03)
 
 
