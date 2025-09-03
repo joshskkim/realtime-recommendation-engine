@@ -18,7 +18,10 @@ FROM node:lts-trixie-slim
 WORKDIR /app
 
 # Install dumb-init for proper signal handling
-RUN apk update && apk upgrade && apk add --no-cache dumb-init
+RUN apt-get update \
+ && apt-get upgrade -y \
+ && apt-get install -y dumb-init \
+ && rm -rf /var/lib/apt/lists/*
 
 # Create non-root user
 RUN addgroup -g 1001 -S nodejs && \
