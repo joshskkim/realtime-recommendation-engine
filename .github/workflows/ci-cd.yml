@@ -179,19 +179,22 @@ jobs:
 
       - name: Scan image with Trivy
         if: steps.check_dir.outputs.exists == 'true'
-        run: |
-          trivy image \
-            --severity CRITICAL,HIGH \
-            --exit-code 0 \
-            --ignorefile trivy-ignore.yaml \
-            ${{ matrix.service }}:test
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: ${{ matrix.service }}:test
+          format: table
+          exit-code: '0'
+          severity: CRITICAL,HIGH
+          trivyignores: 'trivy-ignore.yaml'
 
       - name: Run Grype vulnerability scan
         if: steps.check_dir.outputs.exists == 'true'
-        run: |
-          grype ${{ matrix.service }}:test \
-            --config grype-ignore.yaml \
-            --fail-on critical
+        uses: anchore/scan-action@v3
+        with:
+          image: ${{ matrix.service }}:test
+          fail-build: true
+          severity-cutoff: critical
+          grype-ignore: 'grype-ignore.yaml'
 
   # Local Kubernetes testing with Kind
   k8s-test:

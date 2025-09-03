@@ -1,0 +1,6 @@
+# Grype configuration with ignored vulnerabilities
+ignore:
+  # Ignore zlib1g CVE-2023-45853
+  - vulnerability: CVE-2023-45853
+    reason: "False positive - affects minizip functionality not used by .NET runtime"
+    created_at: 2024-01-01

@@ -1,4 +1,0 @@
-ignore:
-  - vuln: CVE-2023-45853
-    reason: "False positive for our use case"
-    expires: 2025-12-31T23:59:59Z
