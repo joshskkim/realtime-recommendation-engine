@@ -1,3 +1,10 @@
+## [1.0.29](https://github.com/joshskkim/realtime-recommendation-engine/compare/v1.0.28...v1.0.29) (2025-09-03)
+
+
+### Bug Fixes
+
+* dotnet ([28c7d04](https://github.com/joshskkim/realtime-recommendation-engine/commit/28c7d04fb5ec5936513e96003c798ca836413544))
+
 ## [1.0.28](https://github.com/joshskkim/realtime-recommendation-engine/compare/v1.0.27...v1.0.28) (2025-09-03)
 
 
