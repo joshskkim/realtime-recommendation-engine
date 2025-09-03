@@ -10,7 +10,8 @@ on:
       - main
 
 permissions:
-  contents: read
+  contents: write
+  packages: write
   security-events: write
 
 env:
