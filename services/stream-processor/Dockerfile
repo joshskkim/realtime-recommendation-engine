@@ -1,19 +1,17 @@
-FROM python:3.13.7-alpine3.22 AS builder
+FROM python:3.13.7-slim AS builder
 
 WORKDIR /app
 
 # Install build dependencies for compiling packages like numpy
-RUN apk update && apk add --no-cache \
-    blas-dev \
-    build-base \
-    gfortran \
-    lapack-dev \
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential \
+    libatlas-base-dev \
     libffi-dev \
-    musl-dev \
-    openssl-dev \
-    postgresql-dev \
-    python3-dev \
-    && rm -rf /var/cache/apk/*
+    libpq-dev \
+    && pip install --upgrade pip \
+    && pip install scipy \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
 
 # Upgrade pip/setuptools/wheel
 RUN pip install --upgrade pip setuptools wheel
