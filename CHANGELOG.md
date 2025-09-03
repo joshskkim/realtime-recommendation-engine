@@ -1,3 +1,10 @@
+## [1.0.38](https://github.com/joshskkim/realtime-recommendation-engine/compare/v1.0.37...v1.0.38) (2025-09-03)
+
+
+### Bug Fixes
+
+* libopen ([99b7edf](https://github.com/joshskkim/realtime-recommendation-engine/commit/99b7edf9cf13d7ee4d6b5342f7ec3ec8aab7d186))
+
 ## [1.0.37](https://github.com/joshskkim/realtime-recommendation-engine/compare/v1.0.36...v1.0.37) (2025-09-03)
 
 
