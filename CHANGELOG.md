@@ -1,3 +1,10 @@
+## [1.0.5](https://github.com/joshskkim/realtime-recommendation-engine/compare/v1.0.4...v1.0.5) (2025-09-03)
+
+
+### Bug Fixes
+
+* apk to apt ([5d5a42b](https://github.com/joshskkim/realtime-recommendation-engine/commit/5d5a42b19d1c1b6c4223d62ee7e81c97d63c7f81))
+
 ## [1.0.4](https://github.com/joshskkim/realtime-recommendation-engine/compare/v1.0.3...v1.0.4) (2025-09-03)
 
 
