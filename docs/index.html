@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Real-Time Recommendation Engine - Demo</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: #e2e8f0;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        header {
+            text-align: center;
+            padding: 3rem 0;
+            margin-bottom: 3rem;
+        }
+        
+        h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .subtitle {
+            font-size: 1.25rem;
+            color: #94a3b8;
+            margin-bottom: 2rem;
+        }
+        
+        .badges {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .badge {
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            padding: 0.5rem 1rem;
+            border-radius: 9999px;
+            font-size: 0.875rem;
+        }
+        
+        .section {
+            margin-bottom: 4rem;
+        }
+        
+        h2 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: #f1f5f9;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        h3 {
+            font-size: 1.5rem;
+            margin: 2rem 0 1rem;
+            color: #cbd5e1;
+        }
+        
+        .screenshot-container {
+            background: rgba(30, 41, 59, 0.5);
+            border: 1px solid rgba(100, 116, 139, 0.3);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            backdrop-filter: blur(10px);
+        }
+        
+        .screenshot-container img,
+        .screenshot-container object {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+            background: white;
+        }
+        
+        .caption {
+            margin-top: 1rem;
+            text-align: center;
+            color: #94a3b8;
+            font-style: italic;
+        }
+        
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 2rem;
+        }
+        
+        .timestamp {
+            text-align: center;
+            margin-top: 4rem;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(100, 116, 139, 0.3);
+            color: #64748b;
+        }
+        
+        .nav {
+            display: flex;
+            gap: 2rem;
+            justify-content: center;
+            margin-bottom: 2rem;
+        }
+        
+        .nav a {
+            color: #3b82f6;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            transition: background 0.3s;
+        }
+        
+        .nav a:hover {
+            background: rgba(59, 130, 246, 0.1);
+        }
+        
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .screenshot-container {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🚀 Real-Time Recommendation Engine</h1>
+            <p class="subtitle">High-Performance ML-Powered Recommendation System</p>
+            <div class="badges">
+                <span class="badge">Docker</span>
+                <span class="badge">Apache Kafka</span>
+                <span class="badge">Machine Learning</span>
+                <span class="badge">PostgreSQL</span>
+                <span class="badge">Redis</span>
+            </div>
+        </header>
+
+        <nav class="nav">
+            <a href="#monitoring">System Monitoring</a>
+            <a href="#performance">Performance</a>
+            <a href="#features">Features</a>
+            <a href="https://github.com/joshskkim/realtime-recommendation-engine">GitHub</a>
+        </nav>
+
+        <section class="section" id="monitoring">
+            <h2>📊 System Monitoring</h2>
+            <div class="screenshot-container">
+                <object data="media/screenshots/monitoring/docker-stats-2025-09-04.svg" type="image/svg+xml">
+                    <img src="media/screenshots/monitoring/docker-stats-2025-09-04.svg" alt="Docker Stats">
+                </object>
+                <p class="caption">Real-time container monitoring showing CPU, memory, and network usage</p>
+            </div>
+        </section>
+
+        <section class="section" id="performance">
+            <h2>📈 Performance Dashboard</h2>
+            <div class="screenshot-container">
+                <object data="media/screenshots/performance/performance-dashboard-2025-09-04.svg" type="image/svg+xml">
+                    <img src="media/screenshots/performance/performance-dashboard-2025-09-04.svg" alt="Performance Dashboard">
+                </object>
+                <p class="caption">Key performance metrics including throughput and response times</p>
+            </div>
+        </section>
+
+        <section class="section" id="features">
+            <h2>⭐ Application Features</h2>
+            
+            <h3>Landing Page</h3>
+            <div class="screenshot-container">
+                <object data="media/screenshots/features/01-landing-page-2025-09-04.svg" type="image/svg+xml">
+                    <img src="media/screenshots/features/01-landing-page-2025-09-04.svg" alt="Landing Page">
+                </object>
+                <p class="caption">Clean, modern landing page with clear call-to-action</p>
+            </div>
+
+            <div class="grid">
+                <div>
+                    <h3>Dashboard</h3>
+                    <div class="screenshot-container">
+                        <object data="media/screenshots/features/02-dashboard-2025-09-04.svg" type="image/svg+xml">
+                            <img src="media/screenshots/features/02-dashboard-2025-09-04.svg" alt="Dashboard">
+                        </object>
+                        <p class="caption">Real-time recommendation dashboard with system status</p>
+                    </div>
+                </div>
+
+                <div>
+                    <h3>API Response</h3>
+                    <div class="screenshot-container">
+                        <object data="media/screenshots/features/03-api-response-2025-09-04.svg" type="image/svg+xml">
+                            <img src="media/screenshots/features/03-api-response-2025-09-04.svg" alt="API Response">
+                        </object>
+                        <p class="caption">Example API response showing recommendation data structure</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="timestamp">
+            Generated: September 3, 2025 | 8:28:03 PM
+        </div>
+    </div>
+</body>
+</html>
