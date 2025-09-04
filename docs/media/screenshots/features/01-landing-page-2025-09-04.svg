@@ -24,7 +24,7 @@
         Real-Time Recommendation Engine
       </text>
       <text x="960" y="480" font-size="32" fill="rgba(255,255,255,0.8)" text-anchor="middle">
-        Powered by Apache Kafka & Machine Learning
+        Powered by Apache Kafka &amp; Machine Learning
       </text>
       <rect x="760" y="550" width="400" height="80" rx="40" fill="#3b82f6"/>
       <text x="960" y="605" font-size="28" fill="white" text-anchor="middle">Get Started</text>
