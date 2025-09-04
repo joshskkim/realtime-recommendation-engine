@@ -1,3 +1,10 @@
+# [1.1.0](https://github.com/joshskkim/realtime-recommendation-engine/compare/v1.0.59...v1.1.0) (2025-09-04)
+
+
+### Features
+
+* add project documentation and demo site ([6a9d442](https://github.com/joshskkim/realtime-recommendation-engine/commit/6a9d442e7e7aa532ddc21c3c51def5be1ab0156b))
+
 ## [1.0.59](https://github.com/joshskkim/realtime-recommendation-engine/compare/v1.0.58...v1.0.59) (2025-09-03)
 
 
