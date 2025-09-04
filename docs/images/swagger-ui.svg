@@ -1,0 +1,50 @@
+<svg width="1920" height="1080" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1e3c72;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#2a5298;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  <rect width="1920" height="1080" fill="url(#grad)"/>
+  <text x="960" y="80" font-family="Arial" font-size="48" font-weight="bold" fill="white" text-anchor="middle">Swagger API Documentation</text>
+  
+  <rect x="100" y="150" width="1720" height="800" rx="10" fill="rgba(255,255,255,0.95)"/>
+  
+  <rect x="100" y="150" width="1720" height="80" fill="#3b82f6"/>
+  <text x="140" y="200" font-size="36" font-weight="bold" fill="white">Recommendation API v1.0</text>
+  
+  <g transform="translate(140, 280)">
+    <rect width="1640" height="80" rx="5" fill="#10b981" fill-opacity="0.1" stroke="#10b981" stroke-width="2"/>
+    <text x="20" y="35" font-size="20" font-weight="bold" fill="#10b981">GET</text>
+    <text x="100" y="35" font-size="20" fill="#1e293b">/api/recommendations/{userId}</text>
+    <text x="100" y="55" font-size="16" fill="#64748b">Get personalized recommendations for a user</text>
+  </g>
+  
+  <g transform="translate(140, 380)">
+    <rect width="1640" height="80" rx="5" fill="#3b82f6" fill-opacity="0.1" stroke="#3b82f6" stroke-width="2"/>
+    <text x="20" y="35" font-size="20" font-weight="bold" fill="#3b82f6">POST</text>
+    <text x="100" y="35" font-size="20" fill="#1e293b">/api/events/interaction</text>
+    <text x="100" y="55" font-size="16" fill="#64748b">Record user interaction event</text>
+  </g>
+  
+  <g transform="translate(140, 480)">
+    <rect width="1640" height="80" rx="5" fill="#10b981" fill-opacity="0.1" stroke="#10b981" stroke-width="2"/>
+    <text x="20" y="35" font-size="20" font-weight="bold" fill="#10b981">GET</text>
+    <text x="100" y="35" font-size="20" fill="#1e293b">/api/products/trending</text>
+    <text x="100" y="55" font-size="16" fill="#64748b">Get trending products</text>
+  </g>
+  
+  <g transform="translate(140, 580)">
+    <rect width="1640" height="80" rx="5" fill="#f59e0b" fill-opacity="0.1" stroke="#f59e0b" stroke-width="2"/>
+    <text x="20" y="35" font-size="20" font-weight="bold" fill="#f59e0b">PUT</text>
+    <text x="100" y="35" font-size="20" fill="#1e293b">/api/models/retrain</text>
+    <text x="100" y="55" font-size="16" fill="#64748b">Trigger model retraining</text>
+  </g>
+  
+  <g transform="translate(140, 680)">
+    <rect width="1640" height="80" rx="5" fill="#ef4444" fill-opacity="0.1" stroke="#ef4444" stroke-width="2"/>
+    <text x="20" y="35" font-size="20" font-weight="bold" fill="#ef4444">DELETE</text>
+    <text x="100" y="35" font-size="20" fill="#1e293b">/api/cache/clear</text>
+    <text x="100" y="55" font-size="16" fill="#64748b">Clear recommendation cache</text>
+  </g>
+</svg>

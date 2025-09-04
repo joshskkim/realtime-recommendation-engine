@@ -1,0 +1,44 @@
+
+<svg width="1920" height="1080" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1e3c72;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#2a5298;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <rect width="1920" height="1080" fill="url(#bg)"/>
+  
+  <!-- Header -->
+  <text x="960" y="100" font-family="Arial, sans-serif" font-size="48" 
+        font-weight="bold" fill="white" text-anchor="middle">
+    Performance Metrics Dashboard
+  </text>
+  
+  <!-- Content -->
+  <rect x="160" y="180" width="1600" height="800" rx="20" 
+        fill="rgba(255,255,255,0.1)" stroke="rgba(255,255,255,0.2)" stroke-width="2"/>
+  
+  
+      <g transform="translate(300, 300)">
+        <rect width="300" height="180" rx="10" fill="rgba(59,130,246,0.2)"/>
+        <text x="20" y="40" font-size="24" fill="white">CPU Usage</text>
+        <text x="20" y="80" font-size="36" font-weight="bold" fill="#3b82f6">18.5%</text>
+      </g>
+      <g transform="translate(650, 300)">
+        <rect width="300" height="180" rx="10" fill="rgba(139,92,246,0.2)"/>
+        <text x="20" y="40" font-size="24" fill="white">Memory</text>
+        <text x="20" y="80" font-size="36" font-weight="bold" fill="#8b5cf6">2.1 GB</text>
+      </g>
+      <g transform="translate(1000, 300)">
+        <rect width="300" height="180" rx="10" fill="rgba(16,185,129,0.2)"/>
+        <text x="20" y="40" font-size="24" fill="white">Requests/sec</text>
+        <text x="20" y="80" font-size="36" font-weight="bold" fill="#10b981">1,250</text>
+      </g>
+  
+  <!-- Timestamp -->
+  <text x="960" y="1030" font-family="Arial, sans-serif" font-size="24" 
+        fill="rgba(255,255,255,0.6)" text-anchor="middle">
+    Generated: 9/3/2025, 8:28:03 PM
+  </text>
+</svg>

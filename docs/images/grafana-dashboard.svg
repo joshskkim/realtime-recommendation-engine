@@ -1,0 +1,42 @@
+<svg width="1920" height="1080" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1e3c72;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#2a5298;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  <rect width="1920" height="1080" fill="url(#grad)"/>
+  <text x="960" y="80" font-family="Arial" font-size="48" font-weight="bold" fill="white" text-anchor="middle">Grafana Monitoring Dashboard</text>
+  
+  <rect x="100" y="150" width="1720" height="100" rx="10" fill="rgba(255,255,255,0.1)"/>
+  <text x="120" y="210" font-size="32" fill="white">📊 Metrics Overview</text>
+  
+  <g transform="translate(100, 300)">
+    <rect width="400" height="250" rx="10" fill="rgba(16,185,129,0.2)"/>
+    <text x="20" y="40" font-size="24" fill="white">Request Rate</text>
+    <text x="20" y="120" font-size="64" font-weight="bold" fill="#10b981">1,250/s</text>
+    <polyline points="20,200 80,180 140,190 200,150 260,160 320,140 380,145" stroke="#10b981" stroke-width="3" fill="none"/>
+  </g>
+  
+  <g transform="translate(550, 300)">
+    <rect width="400" height="250" rx="10" fill="rgba(59,130,246,0.2)"/>
+    <text x="20" y="40" font-size="24" fill="white">Response Time</text>
+    <text x="20" y="120" font-size="64" font-weight="bold" fill="#3b82f6">45ms</text>
+    <polyline points="20,200 80,195 140,190 200,188 260,185 320,182 380,180" stroke="#3b82f6" stroke-width="3" fill="none"/>
+  </g>
+  
+  <g transform="translate(1000, 300)">
+    <rect width="400" height="250" rx="10" fill="rgba(239,68,68,0.2)"/>
+    <text x="20" y="40" font-size="24" fill="white">Error Rate</text>
+    <text x="20" y="120" font-size="64" font-weight="bold" fill="#10b981">0.02%</text>
+    <polyline points="20,200 80,199 140,200 200,199 260,200 320,199 380,200" stroke="#10b981" stroke-width="3" fill="none"/>
+  </g>
+  
+  <g transform="translate(1450, 300)">
+    <rect width="370" height="250" rx="10" fill="rgba(139,92,246,0.2)"/>
+    <text x="20" y="40" font-size="24" fill="white">CPU Usage</text>
+    <text x="20" y="120" font-size="64" font-weight="bold" fill="#8b5cf6">18%</text>
+    <rect x="20" y="180" width="330" height="40" rx="5" fill="rgba(139,92,246,0.3)"/>
+    <rect x="20" y="180" width="60" height="40" rx="5" fill="#8b5cf6"/>
+  </g>
+</svg>

@@ -1,0 +1,45 @@
+<svg width="1920" height="1080" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1e3c72;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#2a5298;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  <rect width="1920" height="1080" fill="url(#grad)"/>
+  <text x="960" y="80" font-family="Arial" font-size="48" font-weight="bold" fill="white" text-anchor="middle">A/B Testing Dashboard</text>
+  
+  <rect x="100" y="200" width="800" height="600" rx="10" fill="rgba(255,255,255,0.1)"/>
+  <text x="500" y="250" font-size="32" fill="white" text-anchor="middle">A/B Test Results</text>
+  
+  <g transform="translate(150, 300)">
+    <rect width="350" height="400" rx="10" fill="rgba(59,130,246,0.2)"/>
+    <text x="175" y="40" font-size="28" fill="white" text-anchor="middle">Variant A (Control)</text>
+    <text x="30" y="100" font-size="20" fill="white">Conversion Rate:</text>
+    <text x="30" y="140" font-size="36" font-weight="bold" fill="#3b82f6">12.3%</text>
+    <text x="30" y="200" font-size="20" fill="white">Avg. Order Value:</text>
+    <text x="30" y="240" font-size="36" font-weight="bold" fill="#3b82f6">$67.50</text>
+    <text x="30" y="300" font-size="20" fill="white">Sample Size:</text>
+    <text x="30" y="340" font-size="36" font-weight="bold" fill="#3b82f6">10,000</text>
+  </g>
+  
+  <g transform="translate(550, 300)">
+    <rect width="350" height="400" rx="10" fill="rgba(16,185,129,0.2)"/>
+    <text x="175" y="40" font-size="28" fill="white" text-anchor="middle">Variant B (ML Model)</text>
+    <text x="30" y="100" font-size="20" fill="white">Conversion Rate:</text>
+    <text x="30" y="140" font-size="36" font-weight="bold" fill="#10b981">18.7% ↑</text>
+    <text x="30" y="200" font-size="20" fill="white">Avg. Order Value:</text>
+    <text x="30" y="240" font-size="36" font-weight="bold" fill="#10b981">$82.30 ↑</text>
+    <text x="30" y="300" font-size="20" fill="white">Sample Size:</text>
+    <text x="30" y="340" font-size="36" font-weight="bold" fill="#10b981">10,000</text>
+  </g>
+  
+  <g transform="translate(1000, 350)">
+    <rect width="720" height="350" rx="10" fill="rgba(139,92,246,0.1)"/>
+    <text x="360" y="40" font-size="28" fill="white" text-anchor="middle">Statistical Significance</text>
+    <text x="30" y="100" font-size="24" fill="white">p-value: &lt; 0.001</text>
+    <text x="30" y="150" font-size="24" fill="white">Confidence: 99.9%</text>
+    <text x="30" y="200" font-size="24" fill="white">Lift: +52%</text>
+    <text x="30" y="250" font-size="24" fill="#10b981" font-weight="bold">✓ Statistically Significant</text>
+    <text x="30" y="300" font-size="20" fill="#94a3b8">Recommendation: Deploy Variant B</text>
+  </g>
+</svg>

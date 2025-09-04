@@ -14,20 +14,18 @@
 ## 📸 Screenshots
 
 <div align="center">
-  <img src="docs/images/monitoring-dashboard.png" width="800" alt="Monitoring Dashboard">
+  <img src="docs/images/monitoring-dashboard.svg" width="800" alt="Monitoring Dashboard">
   <p><em>Real-time container monitoring</em></p>
 </div>
 
 ### Performance Metrics
-<img src="docs/images/performance-metrics.png" width="400" align="right" alt="Performance">
+<img src="docs/images/performance-dashboard.svg" width="400" align="right" alt="Performance">
 
 - 1,250 requests/second
 - 18.5% CPU usage
 - 2.1GB memory consumption
 
 ## 📸 System Overview
-
-![System Architecture](docs/images/architecture.png)
 
 ## ✨ Key Features
 
@@ -189,7 +187,7 @@ make k8s-test
 
 ### Real-time Monitoring
 
-![Monitoring Dashboard](docs/images/monitoring.png)
+![Monitoring Dashboard](docs/images/monitoring-dashboard.png)
 
 ## 🎯 Use Cases
 
@@ -231,15 +229,15 @@ make k8s-test
 
 ## 📚 Documentation
 
-- [Architecture Details](./docs/architecture.md)
-- [API Specification](./docs/api-spec.md)
-- [Deployment Guide](./docs/deployment.md)
-- [Performance Tuning](./docs/performance.md)
-- [Security Overview](./docs/security.md)
+- [Architecture Details](./documentation/architecture.md)
+- [API Specification](./documentation/api-spec.md)
+- [Deployment Guide](./documentation/deployment.md)
+- [Performance Tuning](./documentation/performance.md)
+- [Security Overview](./documentation/security.md)
 
 ## 🤝 Contributing
 
-We welcome contributions! Please see our [Contributing Guide](CONTRIBUTING.md) for details.
+We welcome contributions!
 
 ```bash
 # Fork and clone
