@@ -19,7 +19,7 @@
 </div>
 
 ### Performance Metrics
-<img src="docs/images/performance-dashboard.svg" width="400" align="right" alt="Performance">
+<img src="docs/images/performance-dashboard.svg" width="200" align="right" alt="Performance">
 
 - 1,250 requests/second
 - 18.5% CPU usage
