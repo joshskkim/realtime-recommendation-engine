@@ -179,15 +179,15 @@ make k8s-test
 
 ### API Documentation
 
-![Swagger UI](docs/images/swagger-ui.png)
+![Swagger UI](docs/images/swagger-ui.svg)
 
 ### A/B Testing Dashboard
 
-![A/B Testing Results](docs/images/ab-testing.png)
+![A/B Testing Results](docs/images/ab-testing.svg)
 
 ### Real-time Monitoring
 
-![Monitoring Dashboard](docs/images/monitoring-dashboard.png)
+![Monitoring Dashboard](docs/images/monitoring-dashboard.svg)
 
 ## 🎯 Use Cases
 
