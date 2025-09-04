@@ -1,0 +1,75 @@
+============================================================
+DOCKER CONTAINER PERFORMANCE REPORT
+Generated: 9/3/2025, 8:18:20 PM
+============================================================
+
+📦 rec-stream-processor
+   Status: Running
+   CPU:    0.17%
+   Memory: 28.98MiB / 3.828GiB (0.74%)
+   Net I/O: 892kB / 809kB
+   Disk I/O: 1.7MB / 0B
+
+📦 rec-cache-service
+   Status: Running
+   CPU:    0.00%
+   Memory: 1.473MiB / 3.828GiB (0.04%)
+   Net I/O: 47.4kB / 143kB
+   Disk I/O: 28.7kB / 0B
+
+📦 rec-postgres
+   Status: Running
+   CPU:    4.67%
+   Memory: 43.21MiB / 3.828GiB (1.10%)
+   Net I/O: 3.29kB / 126B
+   Disk I/O: 28.6MB / 651kB
+
+📦 rec-redis
+   Status: Running
+   CPU:    0.83%
+   Memory: 30.46MiB / 3.828GiB (0.78%)
+   Net I/O: 8.86kB / 152kB
+   Disk I/O: 27.5MB / 4.1kB
+
+📦 rec-kafka
+   Status: Running
+   CPU:    3.54%
+   Memory: 406.5MiB / 3.828GiB (10.37%)
+   Net I/O: 995kB / 2.07MB
+   Disk I/O: 45.1MB / 3.1MB
+
+📦 rec-kafka-ui
+   Status: Running
+   CPU:    0.13%
+   Memory: 275.4MiB / 3.828GiB (7.03%)
+   Net I/O: 1.09MB / 75.8kB
+   Disk I/O: 89.7MB / 840kB
+
+📦 rec-grafana
+   Status: Running
+   CPU:    0.10%
+   Memory: 213.2MiB / 3.828GiB (5.44%)
+   Net I/O: 31.8kB / 14.2kB
+   Disk I/O: 159MB / 168kB
+
+📦 rec-redis-commander
+   Status: Running
+   CPU:    0.00%
+   Memory: 64.59MiB / 3.828GiB (1.65%)
+   Net I/O: 155kB / 5.55kB
+   Disk I/O: 36.4MB / 8.19kB
+
+📦 rec-prometheus
+   Status: Running
+   CPU:    0.00%
+   Memory: 94.64MiB / 3.828GiB (2.41%)
+   Net I/O: 146kB / 44.2kB
+   Disk I/O: 72.5MB / 815kB
+
+📦 rec-zookeeper
+   Status: Running
+   CPU:    0.10%
+   Memory: 125.6MiB / 3.828GiB (3.20%)
+   Net I/O: 99.6kB / 109kB
+   Disk I/O: 62MB / 889kB
+

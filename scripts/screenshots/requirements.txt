@@ -1,0 +1,16 @@
+# requirements-capture.txt
+# Place in: /scripts/screenshots/requirements.txt
+
+# Core dependencies
+selenium==4.27.1
+Pillow==11.0.0
+matplotlib==3.10.0
+
+# Optional but recommended
+requests==2.32.3
+pytest==8.3.4
+python-dotenv==1.0.1
+
+# For video creation (optional)
+# opencv-python==4.10.0.84
+# imageio==2.36.1

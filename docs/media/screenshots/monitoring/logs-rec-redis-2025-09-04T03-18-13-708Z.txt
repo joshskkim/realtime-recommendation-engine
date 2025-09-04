@@ -1,0 +1,20 @@
+2025-09-04T02:52:24.637894594Z 1:M 04 Sep 2025 02:52:24.635 * <ReJSON> Enabled diskless replication
+2025-09-04T02:52:24.637899969Z 1:M 04 Sep 2025 02:52:24.635 * <ReJSON> Initialized shared string cache, thread safe: false.
+2025-09-04T02:52:24.637904344Z 1:M 04 Sep 2025 02:52:24.635 * Module 'ReJSON' loaded from /usr/local/lib/redis/modules//rejson.so
+2025-09-04T02:52:24.637906011Z 1:M 04 Sep 2025 02:52:24.635 * <search> Acquired RedisJSON_V5 API
+2025-09-04T02:52:24.637907594Z 1:M 04 Sep 2025 02:52:24.636 * Server initialized
+2025-09-04T02:52:24.641806677Z 1:M 04 Sep 2025 02:52:24.641 * <search> Loading event starts
+2025-09-04T02:52:24.641839844Z 1:M 04 Sep 2025 02:52:24.641 * <search> Enabled workers threadpool of size 4
+2025-09-04T02:52:24.641847761Z 1:M 04 Sep 2025 02:52:24.641 * Reading RDB base file on AOF loading...
+2025-09-04T02:52:24.642426219Z 1:M 04 Sep 2025 02:52:24.642 * Loading RDB produced by version 8.2.1
+2025-09-04T02:52:24.642466386Z 1:M 04 Sep 2025 02:52:24.642 * RDB age 184469 seconds
+2025-09-04T02:52:24.642513427Z 1:M 04 Sep 2025 02:52:24.642 * RDB memory usage when created 0.95 Mb
+2025-09-04T02:52:24.642556594Z 1:M 04 Sep 2025 02:52:24.642 * RDB is base AOF
+2025-09-04T02:52:24.642559636Z 1:M 04 Sep 2025 02:52:24.642 * Done loading RDB, keys loaded: 0, keys expired: 0.
+2025-09-04T02:52:24.643567219Z 1:M 04 Sep 2025 02:52:24.643 * DB loaded from base file appendonly.aof.1.base.rdb: 0.002 seconds
+2025-09-04T02:52:24.644817594Z 1:M 04 Sep 2025 02:52:24.643 * DB loaded from incr file appendonly.aof.1.incr.aof: 0.001 seconds
+2025-09-04T02:52:24.644843594Z 1:M 04 Sep 2025 02:52:24.643 * <search> Disabled workers threadpool of size 4
+2025-09-04T02:52:24.644846844Z 1:M 04 Sep 2025 02:52:24.643 * <search> Loading event ends
+2025-09-04T02:52:24.644849552Z 1:M 04 Sep 2025 02:52:24.643 * DB loaded from append only file: 0.004 seconds
+2025-09-04T02:52:24.656294552Z 1:M 04 Sep 2025 02:52:24.656 * Opening AOF incr file appendonly.aof.1.incr.aof on server start
+2025-09-04T02:52:24.656688386Z 1:M 04 Sep 2025 02:52:24.656 * Ready to accept connections tcp

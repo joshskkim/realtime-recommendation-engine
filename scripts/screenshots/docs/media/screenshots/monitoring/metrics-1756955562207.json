@@ -1,0 +1,55 @@
+{
+  "containers": [
+    {
+      "name": "rec-stream-processor",
+      "cpu": "0.18%",
+      "memory": "0.74%"
+    },
+    {
+      "name": "rec-cache-service",
+      "cpu": "0.00%",
+      "memory": "0.04%"
+    },
+    {
+      "name": "rec-postgres",
+      "cpu": "0.07%",
+      "memory": "1.10%"
+    },
+    {
+      "name": "rec-redis",
+      "cpu": "0.74%",
+      "memory": "0.78%"
+    },
+    {
+      "name": "rec-kafka",
+      "cpu": "2.36%",
+      "memory": "10.34%"
+    },
+    {
+      "name": "rec-kafka-ui",
+      "cpu": "0.13%",
+      "memory": "7.01%"
+    },
+    {
+      "name": "rec-grafana",
+      "cpu": "0.03%",
+      "memory": "4.86%"
+    },
+    {
+      "name": "rec-redis-commander",
+      "cpu": "0.00%",
+      "memory": "1.65%"
+    },
+    {
+      "name": "rec-prometheus",
+      "cpu": "0.34%",
+      "memory": "2.41%"
+    },
+    {
+      "name": "rec-zookeeper",
+      "cpu": "2.35%",
+      "memory": "3.20%"
+    }
+  ],
+  "disk": "/dev/disk3s1s1                                        228Gi    11Gi   102Gi    10%    446k  1.1G    0%   /\n/dev/disk3s6                                          228Gi   8.0Gi   102Gi     8%       8  1.1G    0%   /System/Volumes/VM\n/dev/disk3s2                                          228Gi   7.4Gi   102Gi     7%    1.4k  1.1G    0%   /System/Volumes/Preboot\n/dev/disk3s4                                          228Gi   3.4Mi   102Gi     1%      66  1.1G    0%   /System/Volumes/Update\n/dev/disk2s2                                          500Mi   6.0Mi   482Mi     2%       1  4.9M    0%   /System/Volumes/xarts\n/dev/disk2s1                                          500Mi   5.7Mi   482Mi     2%      30  4.9M    0%   /System/Volumes/iSCPreboot\n/dev/disk2s3                                          500Mi   1.1Mi   482Mi     1%      74  4.9M    0%   /System/Volumes/Hardware\n/dev/disk3s5                                          228Gi    99Gi   102Gi    50%    812k  1.1G    0%   /System/Volumes/Data\n"
+}

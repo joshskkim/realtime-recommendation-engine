@@ -1,0 +1,7 @@
+2025-09-04T02:52:26.605827970Z %3|1756954346.600|FAIL|stream-processor#producer-1| [thrd:kafka:29092/bootstrap]: kafka:29092/bootstrap: Connect to ipv4#172.19.0.7:29092 failed: Connection refused (after 36ms in state CONNECT)
+2025-09-04T02:52:26.613905136Z %3|1756954346.611|FAIL|rdkafka#producer-3| [thrd:kafka:29092/bootstrap]: kafka:29092/bootstrap: Connect to ipv4#172.19.0.7:29092 failed: Connection refused (after 24ms in state CONNECT)
+2025-09-04T02:52:27.568941970Z %3|1756954347.565|FAIL|stream-processor#producer-1| [thrd:kafka:29092/bootstrap]: kafka:29092/bootstrap: Connect to ipv4#172.19.0.7:29092 failed: Connection refused (after 1ms in state CONNECT, 1 identical error(s) suppressed)
+2025-09-04T02:52:27.585634179Z %3|1756954347.584|FAIL|rdkafka#consumer-2| [thrd:kafka:29092/bootstrap]: kafka:29092/bootstrap: Connect to ipv4#172.19.0.7:29092 failed: Connection refused (after 11ms in state CONNECT)
+2025-09-04T02:52:27.595907804Z %3|1756954347.594|FAIL|rdkafka#producer-3| [thrd:kafka:29092/bootstrap]: kafka:29092/bootstrap: Connect to ipv4#172.19.0.7:29092 failed: Connection refused (after 1ms in state CONNECT, 1 identical error(s) suppressed)
+2025-09-04T02:52:28.581039387Z %3|1756954348.578|FAIL|rdkafka#consumer-2| [thrd:kafka:29092/bootstrap]: kafka:29092/bootstrap: Connect to ipv4#172.19.0.7:29092 failed: Connection refused (after 2ms in state CONNECT, 1 identical error(s) suppressed)
+2025-09-04T02:52:41.608929463Z INFO:__main__:Stream processor started

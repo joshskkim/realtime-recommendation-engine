@@ -1,0 +1,20 @@
+2025-09-03T05:39:16.878677131Z setUpConnection (R:redis:6379:0) Redis error Error: getaddrinfo ENOTFOUND redis
+2025-09-03T05:39:16.878694131Z     at GetAddrInfoReqWrap.onlookup [as oncomplete] (dns.js:66:26)
+2025-09-03T05:39:19.892069424Z setUpConnection (R:redis:6379:0) Redis error Error: getaddrinfo ENOTFOUND redis
+2025-09-03T05:39:19.892145049Z     at GetAddrInfoReqWrap.onlookup [as oncomplete] (dns.js:66:26)
+2025-09-03T05:39:22.911571633Z setUpConnection (R:redis:6379:0) Redis error Error: getaddrinfo ENOTFOUND redis
+2025-09-03T05:39:22.911617300Z     at GetAddrInfoReqWrap.onlookup [as oncomplete] (dns.js:66:26)
+2025-09-03T05:39:25.928373093Z setUpConnection (R:redis:6379:0) Redis error Error: getaddrinfo ENOTFOUND redis
+2025-09-03T05:39:25.928476093Z     at GetAddrInfoReqWrap.onlookup [as oncomplete] (dns.js:66:26)
+2025-09-03T05:39:28.944560386Z setUpConnection (R:redis:6379:0) Redis error Error: getaddrinfo ENOTFOUND redis
+2025-09-03T05:39:28.944814678Z     at GetAddrInfoReqWrap.onlookup [as oncomplete] (dns.js:66:26)
+2025-09-03T05:39:31.972650721Z setUpConnection (R:redis:6379:0) Redis error Error: getaddrinfo ENOTFOUND redis
+2025-09-03T05:39:31.972878263Z     at GetAddrInfoReqWrap.onlookup [as oncomplete] (dns.js:66:26)
+2025-09-04T02:52:24.599133969Z Creating custom redis-commander config '/redis-commander/config/local-production.json'.
+2025-09-04T02:52:24.737152761Z Parsing 1 REDIS_HOSTS into custom redis-commander config '/redis-commander/config/local-production.json'.
+2025-09-04T02:52:26.217556761Z node ./bin/redis-commander  
+2025-09-04T02:52:30.757588180Z Using scan instead of keys
+2025-09-04T02:52:30.788106972Z No Save: false
+2025-09-04T02:52:34.557945543Z listening on 0.0.0.0:8081
+2025-09-04T02:52:34.564224918Z access with browser at http://127.0.0.1:8081
+2025-09-04T02:52:35.046311210Z Redis Connection redis:6379 using Redis DB #0

@@ -1,0 +1,112 @@
+[
+  {
+    "BlockIO": "1.7MB / 0B",
+    "CPUPerc": "0.17%",
+    "Container": "8a4f3da37194",
+    "ID": "8a4f3da37194",
+    "MemPerc": "0.74%",
+    "MemUsage": "28.98MiB / 3.828GiB",
+    "Name": "rec-stream-processor",
+    "NetIO": "892kB / 809kB",
+    "PIDs": "19"
+  },
+  {
+    "BlockIO": "28.7kB / 0B",
+    "CPUPerc": "0.00%",
+    "Container": "b1832dacc2f0",
+    "ID": "b1832dacc2f0",
+    "MemPerc": "0.04%",
+    "MemUsage": "1.473MiB / 3.828GiB",
+    "Name": "rec-cache-service",
+    "NetIO": "47.4kB / 143kB",
+    "PIDs": "9"
+  },
+  {
+    "BlockIO": "28.6MB / 651kB",
+    "CPUPerc": "4.67%",
+    "Container": "8d475e99d364",
+    "ID": "8d475e99d364",
+    "MemPerc": "1.10%",
+    "MemUsage": "43.21MiB / 3.828GiB",
+    "Name": "rec-postgres",
+    "NetIO": "3.29kB / 126B",
+    "PIDs": "6"
+  },
+  {
+    "BlockIO": "27.5MB / 4.1kB",
+    "CPUPerc": "0.83%",
+    "Container": "26ce046f555c",
+    "ID": "26ce046f555c",
+    "MemPerc": "0.78%",
+    "MemUsage": "30.46MiB / 3.828GiB",
+    "Name": "rec-redis",
+    "NetIO": "8.86kB / 152kB",
+    "PIDs": "6"
+  },
+  {
+    "BlockIO": "45.1MB / 3.1MB",
+    "CPUPerc": "3.54%",
+    "Container": "65778f24abc1",
+    "ID": "65778f24abc1",
+    "MemPerc": "10.37%",
+    "MemUsage": "406.5MiB / 3.828GiB",
+    "Name": "rec-kafka",
+    "NetIO": "995kB / 2.07MB",
+    "PIDs": "85"
+  },
+  {
+    "BlockIO": "89.7MB / 840kB",
+    "CPUPerc": "0.13%",
+    "Container": "38929e898c3d",
+    "ID": "38929e898c3d",
+    "MemPerc": "7.03%",
+    "MemUsage": "275.4MiB / 3.828GiB",
+    "Name": "rec-kafka-ui",
+    "NetIO": "1.09MB / 75.8kB",
+    "PIDs": "48"
+  },
+  {
+    "BlockIO": "159MB / 168kB",
+    "CPUPerc": "0.10%",
+    "Container": "cd54b66bbdb2",
+    "ID": "cd54b66bbdb2",
+    "MemPerc": "5.44%",
+    "MemUsage": "213.2MiB / 3.828GiB",
+    "Name": "rec-grafana",
+    "NetIO": "31.8kB / 14.2kB",
+    "PIDs": "22"
+  },
+  {
+    "BlockIO": "36.4MB / 8.19kB",
+    "CPUPerc": "0.00%",
+    "Container": "3247f8023ee1",
+    "ID": "3247f8023ee1",
+    "MemPerc": "1.65%",
+    "MemUsage": "64.59MiB / 3.828GiB",
+    "Name": "rec-redis-commander",
+    "NetIO": "155kB / 5.55kB",
+    "PIDs": "12"
+  },
+  {
+    "BlockIO": "72.5MB / 815kB",
+    "CPUPerc": "0.00%",
+    "Container": "3fde9cbd6cd4",
+    "ID": "3fde9cbd6cd4",
+    "MemPerc": "2.41%",
+    "MemUsage": "94.64MiB / 3.828GiB",
+    "Name": "rec-prometheus",
+    "NetIO": "146kB / 44.2kB",
+    "PIDs": "13"
+  },
+  {
+    "BlockIO": "62MB / 889kB",
+    "CPUPerc": "0.10%",
+    "Container": "a1ac2f6a5a4e",
+    "ID": "a1ac2f6a5a4e",
+    "MemPerc": "3.20%",
+    "MemUsage": "125.6MiB / 3.828GiB",
+    "Name": "rec-zookeeper",
+    "NetIO": "99.6kB / 109kB",
+    "PIDs": "60"
+  }
+]

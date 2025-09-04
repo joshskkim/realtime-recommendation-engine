@@ -10,9 +10,20 @@
 
 **Production-grade recommendation system with microservices, ML, A/B testing, and real-time processing**
 
-[📖 Documentation](./docs) | [🎮 Live Demo](https://demo.yourdomain.com) | [📊 API Docs](https://api.yourdomain.com/docs)
-
 ---
+## 📸 Screenshots
+
+<div align="center">
+  <img src="docs/images/monitoring-dashboard.png" width="800" alt="Monitoring Dashboard">
+  <p><em>Real-time container monitoring</em></p>
+</div>
+
+### Performance Metrics
+<img src="docs/images/performance-metrics.png" width="400" align="right" alt="Performance">
+
+- 1,250 requests/second
+- 18.5% CPU usage
+- 2.1GB memory consumption
 
 ## 📸 System Overview
 

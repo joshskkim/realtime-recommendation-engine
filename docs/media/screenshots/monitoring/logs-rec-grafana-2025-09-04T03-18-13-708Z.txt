@@ -1,0 +1,20 @@
+2025-09-04T02:52:30.079598596Z logger=ngalert.state.manager t=2025-09-04T02:52:30.075716721Z level=info msg="Warming state cache for startup"
+2025-09-04T02:52:30.082500513Z logger=grafanaStorageLogger t=2025-09-04T02:52:30.082229638Z level=info msg="Storage starting"
+2025-09-04T02:52:30.105632555Z logger=http.server t=2025-09-04T02:52:30.105285013Z level=info msg="HTTP Server Listen" address=[::]:3000 protocol=http subUrl= socket=
+2025-09-04T02:52:30.120006930Z logger=sqlstore.transactions t=2025-09-04T02:52:30.113314055Z level=info msg="Database locked, sleeping then retrying" error="database is locked" retry=0 code="database is locked"
+2025-09-04T02:52:30.584157555Z logger=ngalert.state.manager t=2025-09-04T02:52:30.575381763Z level=info msg="State cache has been initialized" states=0 duration=499.652126ms
+2025-09-04T02:52:30.584322680Z logger=ngalert.scheduler t=2025-09-04T02:52:30.583611555Z level=info msg="Starting scheduler" tickInterval=10s maxAttempts=1
+2025-09-04T02:52:30.584669263Z logger=ticker t=2025-09-04T02:52:30.584497222Z level=info msg=starting first_tick=2025-09-04T02:52:40Z
+2025-09-04T02:52:30.698646638Z logger=provisioning.dashboard t=2025-09-04T02:52:30.697036388Z level=info msg="starting to provision dashboards"
+2025-09-04T02:52:30.698729972Z logger=provisioning.dashboard t=2025-09-04T02:52:30.697110472Z level=info msg="finished to provision dashboards"
+2025-09-04T02:52:30.997944347Z logger=plugins.update.checker t=2025-09-04T02:52:30.997091097Z level=info msg="Update check succeeded" duration=903.45525ms
+2025-09-04T02:52:31.001773597Z logger=grafana.update.checker t=2025-09-04T02:52:31.001575305Z level=info msg="Update check succeeded" duration=915.951251ms
+2025-09-04T02:52:31.039272930Z logger=plugin.angulardetectorsprovider.dynamic t=2025-09-04T02:52:31.038824639Z level=info msg="Patterns update finished" duration=960.628918ms
+2025-09-04T02:52:31.522105791Z logger=grafana-apiserver t=2025-09-04T02:52:31.521169291Z level=info msg="Adding GroupVersion playlist.grafana.app v0alpha1 to ResourceManager"
+2025-09-04T02:52:31.525294541Z logger=grafana-apiserver t=2025-09-04T02:52:31.524961458Z level=info msg="Adding GroupVersion featuretoggle.grafana.app v0alpha1 to ResourceManager"
+2025-09-04T02:52:31.556331333Z logger=grafana-apiserver t=2025-09-04T02:52:31.556085666Z level=info msg="Adding GroupVersion iam.grafana.app v0alpha1 to ResourceManager"
+2025-09-04T02:53:15.103018214Z logger=infra.usagestats t=2025-09-04T02:53:15.102483964Z level=info msg="Usage stats are ready to report"
+2025-09-04T03:02:30.272304805Z logger=cleanup t=2025-09-04T03:02:30.26839743Z level=info msg="Completed cleanup jobs" duration=211.078084ms
+2025-09-04T03:02:31.150397222Z logger=plugins.update.checker t=2025-09-04T03:02:31.150009639Z level=info msg="Update check succeeded" duration=163.622501ms
+2025-09-04T03:12:30.123032596Z logger=cleanup t=2025-09-04T03:12:30.12170818Z level=info msg="Completed cleanup jobs" duration=57.027042ms
+2025-09-04T03:12:31.122584847Z logger=plugins.update.checker t=2025-09-04T03:12:31.122113388Z level=info msg="Update check succeeded" duration=127.720583ms

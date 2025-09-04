@@ -1,0 +1,11 @@
+2025-09-04T02:52:23.936587219Z 
+2025-09-04T02:52:23.936761344Z PostgreSQL Database directory appears to contain a database; Skipping initialization
+2025-09-04T02:52:23.936764469Z 
+2025-09-04T02:52:24.711148969Z 2025-09-04 02:52:24.709 UTC [1] LOG:  starting PostgreSQL 15.14 on aarch64-unknown-linux-musl, compiled by gcc (Alpine 14.2.0) 14.2.0, 64-bit
+2025-09-04T02:52:24.711193594Z 2025-09-04 02:52:24.710 UTC [1] LOG:  listening on IPv4 address "0.0.0.0", port 5432
+2025-09-04T02:52:24.711200302Z 2025-09-04 02:52:24.710 UTC [1] LOG:  listening on IPv6 address "::", port 5432
+2025-09-04T02:52:24.731973844Z 2025-09-04 02:52:24.731 UTC [1] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2025-09-04T02:52:24.780763511Z 2025-09-04 02:52:24.780 UTC [28] LOG:  database system was shut down at 2025-09-02 21:48:51 UTC
+2025-09-04T02:52:24.842557386Z 2025-09-04 02:52:24.842 UTC [1] LOG:  database system is ready to accept connections
+2025-09-04T02:57:24.881612886Z 2025-09-04 02:57:24.880 UTC [26] LOG:  checkpoint starting: time
+2025-09-04T02:57:24.898237511Z 2025-09-04 02:57:24.897 UTC [26] LOG:  checkpoint complete: wrote 3 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.005 s, sync=0.002 s, total=0.019 s; sync files=2, longest=0.001 s, average=0.001 s; distance=0 kB, estimate=0 kB

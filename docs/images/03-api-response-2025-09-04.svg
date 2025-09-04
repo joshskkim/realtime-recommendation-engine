@@ -1,0 +1,57 @@
+
+<svg width="1920" height="1080" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1e3c72;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#2a5298;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <rect width="1920" height="1080" fill="url(#bg)"/>
+  
+  <!-- Header -->
+  <text x="960" y="100" font-family="Arial, sans-serif" font-size="48" 
+        font-weight="bold" fill="white" text-anchor="middle">
+    API Response Example
+  </text>
+  
+  <!-- Content -->
+  <rect x="160" y="180" width="1600" height="800" rx="20" 
+        fill="rgba(255,255,255,0.1)" stroke="rgba(255,255,255,0.2)" stroke-width="2"/>
+  
+  
+      <rect x="200" y="250" width="1520" height="600" rx="10" fill="rgba(0,0,0,0.3)"/>
+      <text x="220" y="290" font-family="monospace" font-size="20" fill="#10b981">
+        GET /api/recommendations/user/12345
+      </text>
+      <text x="220" y="340" font-family="monospace" font-size="18" fill="white">
+        {
+      </text>
+      <text x="260" y="380" font-family="monospace" font-size="18" fill="white">
+        "status": "success",
+      </text>
+      <text x="260" y="420" font-family="monospace" font-size="18" fill="white">
+        "recommendations": [
+      </text>
+      <text x="300" y="460" font-family="monospace" font-size="18" fill="white">
+        { "id": "prod_123", "score": 0.95, "category": "electronics" },
+      </text>
+      <text x="300" y="500" font-family="monospace" font-size="18" fill="white">
+        { "id": "prod_456", "score": 0.92, "category": "books" }
+      </text>
+      <text x="260" y="540" font-family="monospace" font-size="18" fill="white">
+        ],
+      </text>
+      <text x="260" y="580" font-family="monospace" font-size="18" fill="white">
+        "timestamp": "2025-09-04T03:19:10.709Z"
+      </text>
+      <text x="220" y="620" font-family="monospace" font-size="18" fill="white">
+        }
+      </text>
+  
+  <!-- Timestamp -->
+  <text x="960" y="1030" font-family="Arial, sans-serif" font-size="24" 
+        fill="rgba(255,255,255,0.6)" text-anchor="middle">
+    Generated: 9/3/2025, 8:19:10 PM
+  </text>
+</svg>

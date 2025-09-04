@@ -1,0 +1,2 @@
+2025-09-04T02:52:24.101026094Z [2m2025-09-04T02:52:24.099542Z[0m [32m INFO[0m [2mcache_service[0m[2m:[0m Starting Rust Cache Service
+2025-09-04T02:52:24.108214302Z [2m2025-09-04T02:52:24.107935Z[0m [32m INFO[0m [2mcache_service[0m[2m:[0m Cache service listening on 0.0.0.0:8082

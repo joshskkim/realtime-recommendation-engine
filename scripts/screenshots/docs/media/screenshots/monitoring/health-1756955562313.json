@@ -1,0 +1,65 @@
+{
+  "timestamp": "2025-09-04T03:12:42.208Z",
+  "services": [
+    {
+      "name": "rec-stream-processor",
+      "status": "Up 20 minutes (healthy)",
+      "state": "running",
+      "ports": ""
+    },
+    {
+      "name": "rec-cache-service",
+      "status": "Up 20 minutes (unhealthy)",
+      "state": "running",
+      "ports": "0.0.0.0:8082->8082/tcp, [::]:8082->8082/tcp"
+    },
+    {
+      "name": "rec-postgres",
+      "status": "Up 20 minutes (healthy)",
+      "state": "running",
+      "ports": "0.0.0.0:5432->5432/tcp, [::]:5432->5432/tcp"
+    },
+    {
+      "name": "rec-redis",
+      "status": "Up 20 minutes (healthy)",
+      "state": "running",
+      "ports": "0.0.0.0:6379->6379/tcp, [::]:6379->6379/tcp"
+    },
+    {
+      "name": "rec-kafka",
+      "status": "Up 20 minutes (healthy)",
+      "state": "running",
+      "ports": "0.0.0.0:9092->9092/tcp, [::]:9092->9092/tcp, 0.0.0.0:29092->29092/tcp, [::]:29092->29092/tcp"
+    },
+    {
+      "name": "rec-kafka-ui",
+      "status": "Up 20 minutes",
+      "state": "running",
+      "ports": "0.0.0.0:8080->8080/tcp, [::]:8080->8080/tcp"
+    },
+    {
+      "name": "rec-grafana",
+      "status": "Up 20 minutes",
+      "state": "running",
+      "ports": "0.0.0.0:3000->3000/tcp, [::]:3000->3000/tcp"
+    },
+    {
+      "name": "rec-redis-commander",
+      "status": "Up 20 minutes (healthy)",
+      "state": "running",
+      "ports": "0.0.0.0:8081->8081/tcp, [::]:8081->8081/tcp"
+    },
+    {
+      "name": "rec-prometheus",
+      "status": "Up 20 minutes",
+      "state": "running",
+      "ports": "0.0.0.0:9090->9090/tcp, [::]:9090->9090/tcp"
+    },
+    {
+      "name": "rec-zookeeper",
+      "status": "Up 20 minutes",
+      "state": "running",
+      "ports": "0.0.0.0:2181->2181/tcp, [::]:2181->2181/tcp"
+    }
+  ]
+}

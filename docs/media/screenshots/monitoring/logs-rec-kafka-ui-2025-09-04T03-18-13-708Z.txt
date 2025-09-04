@@ -1,0 +1,20 @@
+2025-09-04T03:13:47.387449507Z [30m2025-09-04 03:13:47,385[0;39m [39mDEBUG[0;39m [[34mparallel-6[0;39m] [33mc.p.k.u.s.ClustersStatisticsScheduler[0;39m: Start getting metrics for kafkaCluster: local
+2025-09-04T03:13:47.484148590Z [30m2025-09-04 03:13:47,483[0;39m [39mDEBUG[0;39m [[34mparallel-5[0;39m] [33mc.p.k.u.s.ClustersStatisticsScheduler[0;39m: Metrics updated for cluster: local
+2025-09-04T03:14:17.393422090Z [30m2025-09-04 03:14:17,384[0;39m [39mDEBUG[0;39m [[34mparallel-6[0;39m] [33mc.p.k.u.s.ClustersStatisticsScheduler[0;39m: Start getting metrics for kafkaCluster: local
+2025-09-04T03:14:17.510215007Z [30m2025-09-04 03:14:17,509[0;39m [39mDEBUG[0;39m [[34mparallel-5[0;39m] [33mc.p.k.u.s.ClustersStatisticsScheduler[0;39m: Metrics updated for cluster: local
+2025-09-04T03:14:47.381022799Z [30m2025-09-04 03:14:47,377[0;39m [39mDEBUG[0;39m [[34mparallel-6[0;39m] [33mc.p.k.u.s.ClustersStatisticsScheduler[0;39m: Start getting metrics for kafkaCluster: local
+2025-09-04T03:14:47.441630549Z [30m2025-09-04 03:14:47,441[0;39m [39mDEBUG[0;39m [[34mparallel-5[0;39m] [33mc.p.k.u.s.ClustersStatisticsScheduler[0;39m: Metrics updated for cluster: local
+2025-09-04T03:15:17.389367049Z [30m2025-09-04 03:15:17,384[0;39m [39mDEBUG[0;39m [[34mparallel-6[0;39m] [33mc.p.k.u.s.ClustersStatisticsScheduler[0;39m: Start getting metrics for kafkaCluster: local
+2025-09-04T03:15:17.472884882Z [30m2025-09-04 03:15:17,472[0;39m [39mDEBUG[0;39m [[34mparallel-5[0;39m] [33mc.p.k.u.s.ClustersStatisticsScheduler[0;39m: Metrics updated for cluster: local
+2025-09-04T03:15:47.387379840Z [30m2025-09-04 03:15:47,384[0;39m [39mDEBUG[0;39m [[34mparallel-6[0;39m] [33mc.p.k.u.s.ClustersStatisticsScheduler[0;39m: Start getting metrics for kafkaCluster: local
+2025-09-04T03:15:47.472006799Z [30m2025-09-04 03:15:47,471[0;39m [39mDEBUG[0;39m [[34mparallel-5[0;39m] [33mc.p.k.u.s.ClustersStatisticsScheduler[0;39m: Metrics updated for cluster: local
+2025-09-04T03:16:17.394092382Z [30m2025-09-04 03:16:17,388[0;39m [39mDEBUG[0;39m [[34mparallel-6[0;39m] [33mc.p.k.u.s.ClustersStatisticsScheduler[0;39m: Start getting metrics for kafkaCluster: local
+2025-09-04T03:16:17.494066007Z [30m2025-09-04 03:16:17,493[0;39m [39mDEBUG[0;39m [[34mparallel-5[0;39m] [33mc.p.k.u.s.ClustersStatisticsScheduler[0;39m: Metrics updated for cluster: local
+2025-09-04T03:16:47.401140424Z [30m2025-09-04 03:16:47,393[0;39m [39mDEBUG[0;39m [[34mparallel-6[0;39m] [33mc.p.k.u.s.ClustersStatisticsScheduler[0;39m: Start getting metrics for kafkaCluster: local
+2025-09-04T03:16:47.537047507Z [30m2025-09-04 03:16:47,535[0;39m [39mDEBUG[0;39m [[34mparallel-5[0;39m] [33mc.p.k.u.s.ClustersStatisticsScheduler[0;39m: Metrics updated for cluster: local
+2025-09-04T03:17:17.379208507Z [30m2025-09-04 03:17:17,376[0;39m [39mDEBUG[0;39m [[34mparallel-6[0;39m] [33mc.p.k.u.s.ClustersStatisticsScheduler[0;39m: Start getting metrics for kafkaCluster: local
+2025-09-04T03:17:17.489246049Z [30m2025-09-04 03:17:17,488[0;39m [39mDEBUG[0;39m [[34mparallel-5[0;39m] [33mc.p.k.u.s.ClustersStatisticsScheduler[0;39m: Metrics updated for cluster: local
+2025-09-04T03:17:47.399315840Z [30m2025-09-04 03:17:47,393[0;39m [39mDEBUG[0;39m [[34mparallel-6[0;39m] [33mc.p.k.u.s.ClustersStatisticsScheduler[0;39m: Start getting metrics for kafkaCluster: local
+2025-09-04T03:17:47.511587132Z [30m2025-09-04 03:17:47,511[0;39m [39mDEBUG[0;39m [[34mparallel-5[0;39m] [33mc.p.k.u.s.ClustersStatisticsScheduler[0;39m: Metrics updated for cluster: local
+2025-09-04T03:18:17.383292299Z [30m2025-09-04 03:18:17,380[0;39m [39mDEBUG[0;39m [[34mparallel-6[0;39m] [33mc.p.k.u.s.ClustersStatisticsScheduler[0;39m: Start getting metrics for kafkaCluster: local
+2025-09-04T03:18:17.466505132Z [30m2025-09-04 03:18:17,466[0;39m [39mDEBUG[0;39m [[34mparallel-5[0;39m] [33mc.p.k.u.s.ClustersStatisticsScheduler[0;39m: Metrics updated for cluster: local

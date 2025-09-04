@@ -1,0 +1,38 @@
+
+<svg width="1920" height="1080" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1e3c72;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#2a5298;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <rect width="1920" height="1080" fill="url(#bg)"/>
+  
+  <!-- Header -->
+  <text x="960" y="100" font-family="Arial, sans-serif" font-size="48" 
+        font-weight="bold" fill="white" text-anchor="middle">
+    Docker Container Monitoring
+  </text>
+  
+  <!-- Content -->
+  <rect x="160" y="180" width="1600" height="800" rx="20" 
+        fill="rgba(255,255,255,0.1)" stroke="rgba(255,255,255,0.2)" stroke-width="2"/>
+  
+  
+      <text x="200" y="300" font-family="monospace" font-size="24" fill="white">
+        CONTAINER ID   NAME            CPU %    MEM USAGE / LIMIT
+        a3f4c8b2d1    recommendation   12.5%    512MB / 2GB
+        b7e9f3c5a8    postgres-db      3.2%     256MB / 1GB  
+        c2d8a7f6e9    redis-cache      1.8%     128MB / 512MB
+        d5b3c9f1a7    nginx-proxy      0.5%     64MB / 256MB
+      </text>
+      <rect x="200" y="400" width="400" height="200" rx="10" fill="rgba(16,185,129,0.2)"/>
+      <text x="220" y="450" font-size="20" fill="#10b981">✓ All Systems Operational</text>
+  
+  <!-- Timestamp -->
+  <text x="960" y="1030" font-family="Arial, sans-serif" font-size="24" 
+        fill="rgba(255,255,255,0.6)" text-anchor="middle">
+    Generated: 9/3/2025, 8:19:10 PM
+  </text>
+</svg>

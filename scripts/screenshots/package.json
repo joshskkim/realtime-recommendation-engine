@@ -1,0 +1,21 @@
+{
+  "name": "project-screenshots",
+  "version": "1.0.0",
+  "description": "Automated screenshot and monitoring capture for project documentation",
+  "scripts": {
+    "capture:monitoring": "node monitoring-capture.js",
+    "capture:features": "node feature-demo.js",
+    "capture:all": "npm run capture:monitoring && npm run capture:features",
+    "install:playwright": "npx playwright install",
+    "test:capture": "node test-capture.js"
+  },
+  "dependencies": {
+    "puppeteer": "^24.18.0",
+    "playwright": "^1.55.0",
+    "sharp": "^0.34.3"
+  },
+  "devDependencies": {
+    "jest": "^30.1.3",
+    "@types/node": "^24.3.0"
+  }
+}

@@ -1,0 +1,71 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Docker Container Metrics</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      padding: 20px;
+      color: white;
+    }
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 30px;
+      font-size: 2.5em;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    }
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+    .stat-card {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border-radius: 15px;
+      padding: 20px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    .stat-title {
+      font-size: 1.2em;
+      margin-bottom: 10px;
+      opacity: 0.9;
+    }
+    .stat-value {
+      font-size: 2em;
+      font-weight: bold;
+    }
+    .timestamp {
+      text-align: center;
+      margin-top: 30px;
+      opacity: 0.7;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🚀 Container Performance Metrics</h1>
+    <pre style="background: rgba(0,0,0,0.3); padding: 20px; border-radius: 10px; overflow-x: auto;">
+CONTAINER      CPU %     MEM USAGE / LIMIT     NET I/O           BLOCK I/O
+8a4f3da37194   0.12%     28.97MiB / 3.828GiB   692kB / 628kB     1.7MB / 0B
+b1832dacc2f0   0.00%     1.473MiB / 3.828GiB   38kB / 113kB      28.7kB / 0B
+8d475e99d364   0.00%     43.17MiB / 3.828GiB   3.29kB / 126B     28.6MB / 651kB
+26ce046f555c   0.40%     30.46MiB / 3.828GiB   7.89kB / 151kB    27.5MB / 4.1kB
+65778f24abc1   2.29%     405.4MiB / 3.828GiB   778kB / 1.6MB     45.1MB / 2.59MB
+38929e898c3d   0.09%     274.9MiB / 3.828GiB   848kB / 59.1kB    89.7MB / 688kB
+cd54b66bbdb2   0.05%     190.6MiB / 3.828GiB   31.3kB / 13.7kB   159MB / 168kB
+3247f8023ee1   41.82%    64.88MiB / 3.828GiB   154kB / 4.52kB    36.4MB / 8.19kB
+3fde9cbd6cd4   1.38%     94.47MiB / 3.828GiB   116kB / 34.9kB    72.4MB / 754kB
+a1ac2f6a5a4e   0.15%     125MiB / 3.828GiB     82.2kB / 89.7kB   62MB / 750kB
+
+    </pre>
+    <div class="timestamp">Generated: 9/3/2025, 8:12:40 PM</div>
+  </div>
+</body>
+</html>
