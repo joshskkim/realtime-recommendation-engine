@@ -1,3 +1,10 @@
+# [1.2.0](https://github.com/joshskkim/realtime-recommendation-engine/compare/v1.1.0...v1.2.0) (2025-09-04)
+
+
+### Features
+
+* added screenshots for visual ([4bf1537](https://github.com/joshskkim/realtime-recommendation-engine/commit/4bf1537cd2d043603dea6895dfee656a833444a4))
+
 # [1.1.0](https://github.com/joshskkim/realtime-recommendation-engine/compare/v1.0.59...v1.1.0) (2025-09-04)
 
 
