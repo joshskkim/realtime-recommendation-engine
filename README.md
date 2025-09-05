@@ -58,7 +58,7 @@
 
 ### 📈 Live Metrics Dashboard
 
-![Grafana Dashboard](docs/images/grafana-dashboard.png)
+![Grafana Dashboard](docs/images/grafana-dashboard.svg)
 
 ## 🏗️ Architecture
 
