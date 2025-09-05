@@ -1,3 +1,15 @@
+## [1.2.1](https://github.com/joshskkim/realtime-recommendation-engine/compare/v1.2.0...v1.2.1) (2025-09-05)
+
+
+### Bug Fixes
+
+* css ([da97238](https://github.com/joshskkim/realtime-recommendation-engine/commit/da97238760339757bccf938e17ecaaaab0fa416d))
+* css formatting ([cd7f41f](https://github.com/joshskkim/realtime-recommendation-engine/commit/cd7f41f31041820b58f7d1653ac9d0e4c252db02))
+* documentation image type ([686bd99](https://github.com/joshskkim/realtime-recommendation-engine/commit/686bd996b62af75b346c8a0d5f7486a1efcac901))
+* github pages screenshots ([e4477c1](https://github.com/joshskkim/realtime-recommendation-engine/commit/e4477c1358738b3ef3149f7fcc48145de19d3207))
+* images for github pages ([c886e51](https://github.com/joshskkim/realtime-recommendation-engine/commit/c886e51e7fca8ec062db3f55d517b7c11d7b2219))
+* Update performance.yml ([d8fbbd8](https://github.com/joshskkim/realtime-recommendation-engine/commit/d8fbbd86d81541340ecf2a8971d1738cf0955acc))
+
 # [1.2.0](https://github.com/joshskkim/realtime-recommendation-engine/compare/v1.1.0...v1.2.0) (2025-09-04)
 
 
