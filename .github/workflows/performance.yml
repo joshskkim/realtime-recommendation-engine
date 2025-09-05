@@ -1,8 +1,6 @@
 name: Performance Tests
 
 on:
-  schedule:
-    - cron: '0 4 * * *'  # Daily at 4 AM
   workflow_dispatch:
   push:
     paths:
@@ -25,7 +23,7 @@ jobs:
           done
 
       - name: Upload results
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         if: always()
         with:
           name: k6-results
